@@ -23,3 +23,10 @@
 - `python -m compileall -q app` và sinh OpenAPI đã qua. `python -m pytest -q -o pythonpath=. .pytest_cache/test_phase2_services.py` chạy 7 kiểm tra dịch vụ AI/nạp với dữ liệu giả lập bên ngoài.
 - Smoke test FastAPI với PostgreSQL 16.16 đã qua cho 7 lựa chọn chế độ ôn, gửi lại đánh giá không tạo lượt thứ hai, đọc văn bản, cây chữ, tiến độ, cặp từ, lấy 5 từ và trường hợp thiếu khóa Gemini. Gọi Edge TTS thật trả MP3 và lượt gọi sau lấy lại cùng nội dung và ETag từ cache.
 - Commit `feat: implement study engine, ingestion, and HSK APIs` trên `main`. Chờ hoàn thành frontend và xác minh cuối.
+
+## Giai đoạn 3
+
+- Hoàn thành PWA React với năm khu vực chính, phím tắt, cài đặt Pinyin và giao diện sáng/tối, bảng duyệt nội dung nạp, cây chữ và danh sách phát rảnh tay.
+- `npm run typecheck` và `npm run build` đều qua. `npm run preview` phục vụ đúng bản build và chuyển tiếp `/api/dashboard` tới FastAPI.
+- Kiểm tra trên trình duyệt trên desktop và viewport 390 × 844. Đã mở buổi 8 thẻ, lật thẻ, mở cây chữ, ghi đánh giá và chuyển thẻ. Trình đọc tách đoạn mẫu, tra nghĩa và thêm từ vào kho. Chế độ nghe phát âm, hiện nghĩa rồi tự chuyển thẻ. Trang nạp báo lỗi bằng tiếng Việt khi thiếu khóa Gemini. Manifest và biểu tượng PWA được nạp từ bản build.
+- Commit `feat: build Vietnamese Mandarin study PWA` trên `main`.
