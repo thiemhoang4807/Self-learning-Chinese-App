@@ -23,7 +23,7 @@ from openpyxl.utils.exceptions import InvalidFileException
 from PIL import Image, ImageOps
 from pypinyin import lazy_pinyin
 from pypinyin.constants import Style
-from sqlalchemy import func, select
+from sqlalchemy import func, select, update
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.dialects.sqlite import insert as sqlite_insert
 from sqlalchemy.orm import Session
@@ -379,7 +379,7 @@ def upsert_word(db: Session, payload: ExtractedWord, *, enrich_existing: bool = 
     created = insert_missing(db, Word, values, [Word.simplified])
     query = select(Word).where(Word.simplified == payload.simplified)
     word = db.scalars(query.with_for_update() if enrich_existing else query).one()
-    if not created and not enrich_existing:
+    if not created and not enrich_existing and word.meaning_vi:
         return word
     if not created:
         _fill_missing(word, values)
@@ -404,7 +404,7 @@ def upsert_word(db: Session, payload: ExtractedWord, *, enrich_existing: bool = 
         )
 
     rows = {row.char: row for row in db.scalars(select(Character).where(Character.char.in_(chars)))}
-    if enrich_existing:
+    if not created:
         for char, row in rows.items():
             if char in details:
                 values = details[char].model_dump(exclude={"char", "components"})
@@ -439,6 +439,13 @@ def upsert_sentence(
         [Sentence.hanzi],
     )
     sentence = db.scalars(select(Sentence).where(Sentence.hanzi == payload.hanzi)).one()
+    if grammar_pattern_id is not None and sentence.grammar_pattern_id is None:
+        db.execute(
+            update(Sentence)
+            .where(Sentence.id == sentence.id, Sentence.grammar_pattern_id.is_(None))
+            .values(grammar_pattern_id=grammar_pattern_id)
+        )
+        db.refresh(sentence, attribute_names=["grammar_pattern_id"])
     tokens = set(jieba.cut(sentence.hanzi, HMM=False))
     tokens.update(related_words)
     word_ids = sorted(db.scalars(select(Word.id).where(Word.simplified.in_(tokens))))
@@ -451,6 +458,7 @@ def upsert_sentence(
 
 
 def save_material(db: Session, material: StagedMaterial) -> SourceSummary:
+    from app.db import lock_catalog
     from app.services.study import enqueue
 
     words = {item.simplified: item for item in material.words}
@@ -459,6 +467,7 @@ def save_material(db: Session, material: StagedMaterial) -> SourceSummary:
     if not words and not patterns and not sentences:
         raise HTTPException(status_code=422, detail="Hãy chọn ít nhất một mục để lưu vào kho ôn.")
 
+    lock_catalog(db)
     source = Source(title=material.title, source_type=material.source_type, summary_note=material.summary_note)
     db.add(source)
     db.flush()

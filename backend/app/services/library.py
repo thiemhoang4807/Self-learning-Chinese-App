@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from app.models import UserCard, Word
 from app.schemas.study import ReaderToken, WordPage, WordView
 
-HANZI = re.compile(r"[\u3007\u3400-\u9fff\U00020000-\U000323af]")
+HANZI = re.compile(r"[\u3007\u3400-\u9fff\uf900-\ufaff\U00020000-\U000323af]")
 
 
 def with_word_status():

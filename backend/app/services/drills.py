@@ -34,9 +34,10 @@ def _catalog(db: Session, mode: SessionMode, source_id: int | None, level: int |
             query = query.where(Word.hsk_level == level)
         elif source_id is None:
             # Imported extension words enter the daily queue through explicit enrollment.
-            query = query.where(or_(Word.hsk_level.is_not(None), select(UserCard).where(
-                UserCard.item_type == "word", UserCard.item_id == Word.id,
-            ).exists()))
+            query = query.where(or_(
+                Word.hsk_level.is_not(None) & (Word.meaning_vi != ""),
+                select(UserCard).where(UserCard.item_type == "word", UserCard.item_id == Word.id).exists(),
+            ))
         full.update({("word", word.id): word for word in db.scalars(query)})
     if mode in {"mixed", "reorder", "reverse"}:
         query = select(GrammarPattern)

@@ -1,6 +1,6 @@
 from collections.abc import Iterator
 
-from sqlalchemy import create_engine, event
+from sqlalchemy import create_engine, event, text
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
 from app.config import settings
@@ -18,6 +18,11 @@ if engine.dialect.name == "sqlite":
 
 
 SessionLocal = sessionmaker(engine, expire_on_commit=False)
+
+
+def lock_catalog(session: Session) -> None:
+    if session.get_bind().dialect.name == "postgresql":
+        session.execute(text("SELECT pg_advisory_xact_lock(48259602)"))
 
 
 def get_db() -> Iterator[Session]:

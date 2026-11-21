@@ -125,7 +125,7 @@ export function Reader() {
     setLookup(null)
     setLookupError('')
     request.current?.abort()
-    if (!tokens[index].word) void lookupWord(tokens[index])
+    if (!tokens[index].word?.meaning_vi) void lookupWord(tokens[index])
   }
 
   async function add(word: Word, term: string) {

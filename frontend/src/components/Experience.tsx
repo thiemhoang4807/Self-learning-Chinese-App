@@ -160,7 +160,7 @@ function CharacterDrawer({ character, close }: { character: string; close: () =>
             {group.words.map(word => {
               const status = queued.includes(word.id) ? 'new' : word.status
               return <div key={word.id} className="tree-word">
-                <div><Hanzi text={word.simplified} /><Pinyin text={word.pinyin} /><span>{word.meaning_vi}</span></div>
+                <div><Hanzi text={word.simplified} /><Pinyin text={word.pinyin} /><span>{word.meaning_vi || 'Chưa có nghĩa tiếng Việt'}</span></div>
                 {status && status !== 'ignored' ? <StatusBadge status={status} /> : <Button aria-label={'Thêm ' + word.simplified + ' vào hàng đợi ôn'} disabled={busy !== null} onClick={() => void add(word)}><Plus size={17} />Thêm ôn</Button>}
               </div>
             })}
@@ -197,7 +197,7 @@ export function WordDefinition({ word }: { word: Word }) {
       {word.han_viet && <span className="han-viet">{word.han_viet}</span>}
       {vietnamesePartOfSpeech(word.pos) && <span className="muted">{vietnamesePartOfSpeech(word.pos)}</span>}
     </div>
-    {word.meaning_vi && <p>{word.meaning_vi}</p>}
+    <p>{word.meaning_vi || 'Chưa có nghĩa tiếng Việt.'}</p>
     {word.mnemonic_vi && <p className="mnemonic">{word.mnemonic_vi}</p>}
     {word.usage_note_vi && <p className="muted">{word.usage_note_vi}</p>}
   </>

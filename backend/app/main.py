@@ -7,15 +7,14 @@ from sqlalchemy import text
 from starlette.exceptions import HTTPException
 
 from app.api import ai, ingestion, library, study
-from app.db import SessionLocal
+from app.db import SessionLocal, lock_catalog
 from app.seeds.seed_data import seed_database
 
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     with SessionLocal.begin() as session:
-        if session.get_bind().dialect.name == "postgresql":
-            session.execute(text("SELECT pg_advisory_xact_lock(48259602)"))
+        lock_catalog(session)
         seed_database(session)
     yield
 

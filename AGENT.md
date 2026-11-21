@@ -30,3 +30,12 @@
 - `npm run typecheck` và `npm run build` đều qua. `npm run preview` phục vụ đúng bản build và chuyển tiếp `/api/dashboard` tới FastAPI.
 - Kiểm tra trên trình duyệt trên desktop và viewport 390 × 844. Đã mở buổi 8 thẻ, lật thẻ, mở cây chữ, ghi đánh giá và chuyển thẻ. Trình đọc tách đoạn mẫu, tra nghĩa và thêm từ vào kho. Chế độ nghe phát âm, hiện nghĩa rồi tự chuyển thẻ. Trang nạp báo lỗi bằng tiếng Việt khi thiếu khóa Gemini. Manifest và biểu tượng PWA được nạp từ bản build.
 - Commit `feat: build Vietnamese Mandarin study PWA` trên `main`.
+
+## Giai đoạn 4
+
+- Sửa luồng giữ văn bản dán khi trích xuất thất bại và nối mẫu ngữ pháp vào câu đã nạp trước đó nếu câu chưa có mẫu. Cây chữ hiển thị thêm từ ghép trong danh mục CTI. Các mục đồng tự dùng chung một thẻ và được tính vào cấp tương ứng trong mục tiêu HSK.
+- `python -m pytest -q` trong `backend` trả **16 passed** cùng 4 cảnh báo về API sắp ngừng hỗ trợ trong các thư viện phụ thuộc. Kiểm thử gồm FSRS, đánh dấu từ hay sai, nguồn trùng, tách từ, độ phủ, dự báo, đọc PDF/DOCX/XLSX/CSV và chấm bằng phản hồi Gemini mô phỏng.
+- `npm run typecheck` và `npm run build` trong `frontend` đều trả mã 0. `node --check frontend/dist/sw.js` trả mã 0. `docker compose config` và `docker compose config --services` trả mã 0, với `postgres`, `backend`, `frontend`.
+- `python -m app.seeds.cli` nhập 2.493 mục giản thể duy nhất từ 2.500 mục thi vào PostgreSQL 16, giữ lịch sử đánh giá hiện có. `python scripts/import_hsk_data.py --help` cũng chạy thành công.
+- Kiểm thử Gemini thật cần khóa API. Docker CLI đã xác thực cấu hình. Kiểm thử khởi động container và chuyển đổi PowerPoint/Word cũ cần Docker Engine hoặc LibreOffice trong môi trường kiểm thử.
+- Commit `test: verify study flows and document setup` trên `main`. Lệnh đẩy là `git push -u origin main` tới `https://github.com/thiemhoang4807/Self-learning-Chinese-App.git`.

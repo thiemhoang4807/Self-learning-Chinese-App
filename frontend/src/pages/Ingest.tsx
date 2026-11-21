@@ -94,6 +94,7 @@ export function Ingest() {
       const text = clipboard.getData('text/plain')
       if (text.trim()) {
         event.preventDefault()
+        setPasted(text)
         extractRef.current?.(text)
       }
     }

@@ -6,11 +6,13 @@ from sqlalchemy import or_, select
 from sqlalchemy.orm import Session
 
 from app.config import settings
-from app.db import get_db
+from app.db import get_db, lock_catalog
 from app.models import Character, SourceWord, Word, WordCharacter
 from app.schemas.study import (
     CharacterTree, CharacterView, DashboardView, ReaderLookup, ReaderResult, ReaderText, WordPage, WordView,
 )
+from app.seeds.levels import compounds_containing
+from app.seeds.seed_data import import_words
 from app.services import ai, ingestion
 from app.services.analytics import dashboard
 from app.services.audio import audio_file
@@ -38,10 +40,21 @@ def character_tree(char: str, db: Database):
     if saved is None and settings.gemini_api_key.get_secret_value():
         try:
             payload = ai.lookup_word(char)
-            ingestion.upsert_word(db, payload)
+            lock_catalog(db)
+            ingestion.upsert_word(db, payload, enrich_existing=True)
             db.commit()
         except HTTPException:
             db.rollback()
+        saved = db.scalar(select(Character).where(Character.char == char))
+    compounds = compounds_containing(char)
+    known = set(db.scalars(select(Word.simplified).where(Word.simplified.in_(compounds))))
+    if len(known) < len(compounds):
+        lock_catalog(db)
+        import_words(db, (
+            {"simplified": word, "hsk_level": level}
+            for word, level in compounds.items() if word not in known
+        ))
+        db.commit()
         saved = db.scalar(select(Character).where(Character.char == char))
     if saved is None:
         character = CharacterView(id=0, char=char, pinyin=pinyin(char), han_viet="", radical="",
@@ -72,6 +85,7 @@ def reader_lookup(payload: ReaderLookup, db: Database):
     if known is not None and (known[0].meaning_vi or not settings.gemini_api_key.get_secret_value()):
         return word_view(*known)
     details = ai.lookup_word(name)
+    lock_catalog(db)
     word = ingestion.upsert_word(db, details, enrich_existing=True)
     db.commit()
     return word_view(word, known[1] if known is not None else None)
