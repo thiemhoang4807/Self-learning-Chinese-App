@@ -39,3 +39,7 @@
 - `python -m app.seeds.cli` nhập 2.493 mục giản thể duy nhất từ 2.500 mục thi vào PostgreSQL 16, giữ lịch sử đánh giá hiện có. `python scripts/import_hsk_data.py --help` cũng chạy thành công.
 - Kiểm thử Gemini thật cần khóa API. Docker CLI đã xác thực cấu hình. Kiểm thử khởi động container và chuyển đổi PowerPoint/Word cũ cần Docker Engine hoặc LibreOffice trong môi trường kiểm thử.
 - Commit `test: verify study flows and document setup` trên `main`. Lệnh đẩy là `git push -u origin main` tới `https://github.com/thiemhoang4807/Self-learning-Chinese-App.git`.
+
+## Đồng bộ GitHub ngày 22/11/2026
+
+- `git push -u origin main` thành công và thiết lập upstream `origin/main`. `git ls-remote origin refs/heads/main` xác nhận bản ứng dụng đã xác minh tại `dba0867feff916db579b37d75932728545cd9617`.
