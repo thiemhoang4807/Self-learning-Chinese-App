@@ -1,0 +1,19 @@
+# Word A | Word B | Drill level | Difference | Cloze A | Cloze B
+经历|经验|4|经历 là việc đã trải qua hoặc động từ trải qua. 经验 là hiểu biết hay kỹ năng tích lũy từ thực tế.|他去年___了一场严重的事故。|这份工作要求三年以上的教学___。
+必须|必需|5|必须 là phó từ đứng trước động từ. 必需 chỉ thứ thiết yếu, như 生活必需品.|你___在周五前交报名表。|水是人体___的物质。
+改变|变化|4|改变 thường là làm cho một đối tượng khác đi. 变化 là sự chuyển biến, cũng thường dùng khi trạng thái tự thay đổi.|这个建议___了我们的工作方式。|这座城市十年来发生了很大的___。
+刚才|刚刚|4|刚才 là mốc vừa nãy nên có thể bổ nghĩa cho danh từ. 刚刚 là phó từ chỉ sự việc vừa mới xảy ra.|___的那个电话是谁打来的？|电影___开始，我们进去吧。
+以后|后来|4|以后 lấy một thời điểm làm mốc và có thể nói về tương lai. 后来 kể diễn biến sau đó trong chuyện đã xảy ra.|下个月___我会更有空。|我本来打算坐车，___还是决定步行。
+发现|发觉|5|发现 dùng cho phát hiện hoặc tìm ra một điều mới. 发觉 nhấn mạnh việc chủ thể chợt nhận biết một dấu hiệu.|科学家在岩洞中___了一种此前未知的生物。|听到他的声音，我才___自己一直在发抖。
+适合|合适|4|适合 là động từ, có thể theo sau bằng đối tượng hoặc hoạt động phù hợp. 合适 là tính từ, thường đi với 很 hoặc 不太.|这里___安静地复习。|这条裤子的长短很___。
+关心|关注|5|关心 thường nói mình để tâm, lo cho người hoặc sự việc. 关注 thường đi với vấn đề, tin tức hay một chủ đề đang được theo dõi.|外婆总是___我吃得好不好。|请持续___本网站发布的最新消息。
+偶尔|偶然|5|偶尔 nói tần suất thấp, nghĩa là thỉnh thoảng. 偶然 nhấn mạnh sự tình cờ hoặc trái với tất yếu.|我平时在家做饭，___也去外面吃一次。|这只是一次___的相遇，我们事先没有约好。
+果然|居然|5|果然 xác nhận điều dự đoán. 居然 diễn tả kinh ngạc vì kết quả ngoài dự liệu.|天气预报说会下雪，今天___下了。|他从没学过钢琴，___能弹出这首曲子！
+并且|而且|4|并且 nối thêm hành động hoặc thông tin. 而且 thường tăng thêm mức độ hoặc nêu lý do bổ sung, nhất là sau 不但.|请完整填写表格，___在末尾签名。|这里不但安静，___房租也不贵。
+坚持|保持|5|坚持 là kiên trì làm việc gì hoặc giữ ý kiến. 保持 là duy trì một trạng thái, thói quen hoặc quan hệ.|不管多忙，她都___每天写日记。|进入图书馆之后请___安静。
+改善|改正|5|改善 là làm cho tình trạng tốt hơn. 改正 là sửa một lỗi hoặc hành vi sai.|学校增加了照明来___阅读环境。|请根据老师的批注___错别字。
+保存|保留|5|保存 là giữ thứ gì khỏi mất hoặc hỏng. 保留 là giữ lại một phần, quyền hoặc ý kiến.|请先___文件，再关闭电脑。|双方可以___各自的意见。
+事实|实际|5|事实 là sự thật có thể kiểm chứng. 实际 chỉ thực tế đang diễn ra, thường đối chiếu với dự tính hay lý thuyết.|这些___都有充分的证据支持。|理论听起来不错，但___操作并不容易。
+实现|执行|5|实现 là biến mục tiêu, nguyện vọng thành hiện thực. 执行 là thi hành quy định, lệnh hoặc nhiệm vụ đã giao.|她终于___了成为医生的愿望。|各部门从明天起___新的规定。
+暂时|立刻|5|暂时 nói tình trạng chỉ kéo dài trong một khoảng. 立刻 nói hành động diễn ra ngay sau mốc hiện tại.|前面的道路___封闭，请改走南门。|听见警报后，请___离开大楼。
+感想|感受|5|感想 thiên về suy nghĩ và nhận xét sau trải nghiệm. 感受 còn là động từ chỉ điều mình trực tiếp cảm nhận.|看完电影后，请写下你的观后___。|我能明显___到这里的气温在下降。

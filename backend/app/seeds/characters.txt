@@ -1,0 +1,249 @@
+# Character | Pinyin | Hán-Việt | Radical | Components | Mnemonic
+# Readings and radicals from the Unicode Character Database 17.0.0, © 2025 Unicode, Inc.
+# See unicode-license.txt. Character structures from https://www.babelstone.co.uk/CJK/IDS.TXT
+且|qiě|thả|一 (nhất)|𠀃 𠄠|Gắn chữ 且 với âm thả trong 而且 (hơn nữa).
+中|zhōng|trung|丨|口 丨|Gắn chữ 中 với âm trung trong 中国 (Trung Quốc).
+为|wèi|vay|丶 (chủ)|力 丶 丶|Gắn chữ 为 với âm vay trong 因为 (bởi vì).
+义|yì|nghĩa|丶 (chủ)|乂 丶|Gắn chữ 义 với âm nghĩa trong 意义 (ý nghĩa).
+乐|lè|lạc|丿 (phiệt)|㇒ 𠃋 小|Gắn chữ 乐 với âm lạc trong 快乐 (vui vẻ).
+习|xí|tập|乙 (ất)|𠃌 冫|Nhớ âm tập trong luyện tập, làm nhiều lần cho thành thói quen.
+书|shū|thư|乙 (ất)|𠃍 𠃌 丨 丶|Gắn chữ 书 với âm thư trong 书 (sách).
+了|le|liễu|亅 (quyết)|乛 亅|Gắn chữ 了 với âm liễu trong 了解 (hiểu rõ).
+事|shì|sự|亅 (quyết)|一 口 彐 亅|Gắn chữ 事 với âm sự trong 事情 (sự việc).
+京|jīng|kinh|亠 (đầu)|亠 𱒃|Gắn chữ 京 với âm kinh trong 北京 (Bắc Kinh).
+人|rén|nhân|人 (nhân)||Hai nét xòe như hai chân của một người đang bước.
+介|jiè|giới|人 (nhân)|𠆢 丿 丨|Gắn chữ 介 với âm giới trong 介绍 (giới thiệu).
+以|yǐ|dĩ|人 (nhân)|人 𠄌 丶|Gắn chữ 以 với âm dĩ trong 所以 (cho nên).
+会|huì|hội|人 (nhân)|人 云|Gắn chữ 会 với âm hội trong 机会 (cơ hội).
+但|dàn|đãn|亻 (nhân)|亻 旦|Gắn chữ 但 với âm đãn trong 但是 (nhưng).
+体|tǐ|thể|亻 (nhân)|亻 本|Gắn chữ 体 với âm thể trong 身体 (cơ thể).
+作|zuò|tác|亻 (nhân)|亻 乍|Gắn chữ 作 với âm tác trong 工作 (công việc).
+使|shǐ|sứ|亻 (nhân)|亻 吏|Gắn chữ 使 với âm sứ trong 即使 (cho dù).
+便|biàn|tiện|亻 (nhân)|亻 更|Gắn chữ 便 với âm tiện trong 便宜 (rẻ).
+保|bǎo|bảo|亻 (nhân)|亻 呆|Gắn chữ 保 với âm bảo trong 保护 (bảo vệ).
+信|xìn|tín|亻 (nhân)|亻 言|Gắn chữ 信 với âm tín trong 相信 (tin).
+偶|ǒu|ngẫu|亻 (nhân)|亻 禺|Gắn chữ 偶 với âm ngẫu trong 偶尔 (thỉnh thoảng).
+免|miǎn|miễn|儿 (nhân)|⺈ 口 丿 乚|Gắn chữ 免 với âm miễn trong 难免 (khó tránh khỏi).
+公|gōng|công|八 (bát)|八 厶|Gắn chữ 公 với âm công trong 公司 (công ty).
+关|guān|quan|八 (bát)|丷 天|丷 ở trên 天. Tưởng tượng hai nét khép lại như cánh cổng ở quan ải.
+其|qí|kì|八 (bát)|𠀠 八|Gắn chữ 其 với âm kì trong 其实 (thật ra).
+写|xiě|tả|冖 (mịch)|冖 与|Gắn chữ 写 với âm tả trong 写 (viết).
+决|jué|quyết|冫 (băng)|冫 夬|Bên trái là 冫, bên phải là 夬. Liên hệ quyết tâm với việc dứt khoát chọn một hướng.
+况|kuàng|huống|冫 (băng)|冫 兄|Gắn chữ 况 với âm huống trong 情况 (tình hình).
+准|zhǔn|chốn|冫 (băng)|冫 隹|Gắn chữ 准 với âm chốn trong 准备 (chuẩn bị).
+刚|gāng|cương|刂 (đao)|冈 刂|Gắn chữ 刚 với âm cương trong 刚才 (vừa nãy).
+制|zhì|chế|刂 (đao)|牛 冂 刂|Gắn chữ 制 với âm chế trong 制定 (đề ra).
+刻|kè|khắc|刂 (đao)|亥 刂|Gắn chữ 刻 với âm khắc trong 立刻 (lập tức).
+力|lì|lực|力 (lực)|𠃌 丿|Gắn chữ 力 với âm lực trong 努力 (nỗ lực).
+办|bàn|biện|力 (lực)|力 八|Gắn chữ 办 với âm biện trong 办法 (cách làm).
+功|gōng|công|力 (lực)|工 力|Gắn chữ 功 với âm công trong 成功 (thành công).
+加|jiā|gia|力 (lực)|力 口|Gắn chữ 加 với âm gia trong 参加 (tham gia).
+动|dòng|động|力 (lực)|云 力|Gắn chữ 动 với âm động trong 运动 (vận động).
+助|zhù|trợ|力 (lực)|且 力|Gắn chữ 助 với âm trợ trong 帮助 (giúp đỡ).
+努|nǔ|nỗ|力 (lực)|奴 力|Gắn chữ 努 với âm nỗ trong 努力 (nỗ lực).
+化|huà|hoá|匕 (chủy)|亻 𠤎|Gắn chữ 化 với âm hoá trong 变化 (sự thay đổi).
+北|běi|bắc|匕 (chủy)|丬 匕|Gắn chữ 北 với âm bắc trong 北京 (Bắc Kinh).
+医|yī|y|匸|匚 矢|Gắn chữ 医 với âm y trong 医院 (bệnh viện).
+即|jí|tức|卩 (tiết)|皀 卩|Gắn chữ 即 với âm tức trong 即使 (cho dù).
+历|lì|lịch|厂 (hán)|厂 力|Gắn chữ 历 với âm lịch trong 经历 (trải qua).
+去|qù|khứ|厶 (tư)|土 厶|Gắn chữ 去 với âm khứ trong 过去 (quá khứ).
+参|cān|tham|厶 (tư)|厶 大 彡|Gắn chữ 参 với âm tham trong 参加 (tham gia).
+友|yǒu|hữu|又 (hựu)|𠂇 又|Gắn chữ 友 với âm hữu trong 朋友 (bạn bè).
+反|fǎn|phản|又 (hựu)|𠂆 又|Gắn chữ 反 với âm phản trong 反而 (trái lại).
+发|fā|phát|又 (hựu)|𠃋 丿 又 丶|Gắn chữ 发 với âm phát trong 发现 (phát hiện).
+受|shòu|thụ|又 (hựu)|爫 冖 又|Gắn chữ 受 với âm thụ trong 感受 (cảm nhận).
+变|biàn|biến|又 (hựu)|亦 (lược nét);又|Nhìn phần trên giống 亦 và bàn tay 又 phía dưới. Tưởng tượng bàn tay xoay một vật để nó thay đổi.
+可|kě|khả|口 (khẩu)|丁 口|Gắn chữ 可 với âm khả trong 可能 (có thể).
+司|sī|ti|口 (khẩu)|𠃌 𠮛|Gắn chữ 司 với âm ti trong 公司 (công ty).
+吃|chī|khật|口 (khẩu)|口 乞|Gắn chữ 吃 với âm khật trong 吃 (ăn).
+合|hé|hợp|口 (khẩu)|亼 口|Gắn chữ 合 với âm hợp trong 合适 (phù hợp).
+名|míng|danh|口 (khẩu)|夕 口|Gắn chữ 名 với âm danh trong 名字 (tên).
+后|hòu|hậu|口 (khẩu)|𠂋 口|Gắn chữ 后 với âm hậu trong 后来 (về sau).
+听|tīng|thính|口 (khẩu)|口 斤|口 nhắc tới lời nói. Khi người khác nói, mình lắng nghe.
+响|xiǎng|hưởng|口 (khẩu)|口 向|Gắn chữ 响 với âm hưởng trong 影响 (ảnh hưởng).
+善|shàn|thiện|口 (khẩu)|羊 䒑 口|Gắn chữ 善 với âm thiện trong 改善 (cải thiện).
+喝|hē|hát|口 (khẩu)|口 曷|Gắn chữ 喝 với âm hát trong 喝 (uống).
+回|huí|hồi|囗 (vi)|囗 口|Gắn chữ 回 với âm hồi trong 回 (quay lại).
+因|yīn|nhân|囗 (vi)|囗 大|Gắn chữ 因 với âm nhân trong 因为 (bởi vì).
+国|guó|quốc|囗 (vi)|囗 玉|Gắn chữ 国 với âm quốc trong 中国 (Trung Quốc).
+在|zài|tại|土 (thổ)|𠂇 丨 土|Gắn chữ 在 với âm tại trong 实在 (thật sự).
+坐|zuò|tọa|土 (thổ)|从 土|Gắn chữ 坐 với âm tọa trong 坐 (ngồi).
+坚|jiān|kiên|土 (thổ)|𰀡 土|Gắn chữ 坚 với âm kiên trong 坚持 (kiên trì).
+城|chéng|thành|土 (thổ)|土 成|Gắn chữ 城 với âm thành trong 城市 (thành phố).
+境|jìng|cảnh|土 (thổ)|土 竟|Gắn chữ 境 với âm cảnh trong 环境 (môi trường).
+增|zēng|tăng|土 (thổ)|土 曾|Gắn chữ 增 với âm tăng trong 增加 (tăng).
+备|bèi|bị|夂 (truy)|夂 田|Gắn chữ 备 với âm bị trong 准备 (chuẩn bị).
+复|fù|hạ|夊|𭥍 夊|Gắn chữ 复 với âm hạ trong 复习 (ôn tập).
+外|wài|ngoại|夕 (tịch)|夕 卜|Gắn chữ 外 với âm ngoại trong 意外 (bất ngờ).
+好|hǎo|háo|女 (nữ)|女 子|Gắn chữ 好 với âm háo trong 最好 (tốt nhất).
+如|rú|như|女 (nữ)|女 口|Gắn chữ 如 với âm như trong 如果 (nếu).
+始|shǐ|thuỷ|女 (nữ)|女 台|Gắn chữ 始 với âm thuỷ trong 开始 (bắt đầu).
+子|zǐ|tí|子 (tử)|了 一|Gắn chữ 子 với âm tí trong 杯子 (cốc).
+字|zì|tự|子 (tử)|宀 子|Gắn chữ 字 với âm tự trong 名字 (tên).
+存|cún|tồn|子 (tử)|𠂇 丨 子|Gắn chữ 存 với âm tồn trong 保存 (lưu giữ).
+学|xué|học|子 (tử)|⺍ 冖 子|Nhìn 子 và tưởng tượng một đứa trẻ ngồi học dưới mái trường.
+安|ān|an|宀 (miên)|宀 女|Gắn chữ 安 với âm an trong 安排 (sắp xếp).
+定|dìng|định|宀 (miên)|宀 𤴓|Gắn chữ 定 với âm định trong 决定 (quyết định).
+宜|yí|nghi|宀 (miên)|宀 且|Gắn chữ 宜 với âm nghi trong 便宜 (rẻ).
+实|shí|thực|宀 (miên)|宀 头|宀 như mái nhà. Nhớ một việc thực tế bằng điều mình nhìn thấy ngay trong nhà.
+家|jiā|gia|宀 (miên)|宀 豕|宀 là mái nhà ở trên 豕. Hình dung mái nhà che chở cả nhà.
+对|duì|đối|寸 (thốn)|又 寸|Gắn chữ 对 với âm đối trong 对象 (đối tượng).
+小|xiǎo|tiểu|小 (tiểu)|㇒ 亅 丶|Gắn chữ 小 với âm tiểu trong 小时 (giờ).
+尔|ěr|nể|小 (tiểu)|㇒ 乛 小|Gắn chữ 尔 với âm nể trong 偶尔 (thỉnh thoảng).
+居|jū|cư|尸 (thi)|尸 古|Gắn chữ 居 với âm cư trong 居然 (không ngờ).
+工|gōng|công|工 (công)|丅 一|Gắn chữ 工 với âm công trong 工作 (công việc).
+已|yǐ|dĩ|己 (kỷ)||Gắn chữ 已 với âm dĩ trong 已经 (đã).
+市|shì|thị|巾 (cân)|亠 巾|Gắn chữ 市 với âm thị trong 城市 (thành phố).
+师|shī|sư|巾 (cân)|丨 丿 一 巾|Gắn chữ 师 với âm sư trong 老师 (thầy).
+希|xī|hơi|巾 (cân)|㐅 布|Gắn chữ 希 với âm hơi trong 希望 (hy vọng).
+帮|bāng|bang|巾 (cân)|邦 巾|Gắn chữ 帮 với âm bang trong 帮助 (giúp đỡ).
+干|gàn|can|干 (can)|一 十|Gắn chữ 干 với âm can trong 干脆 (dứt khoát).
+并|bìng|tính|干 (can)|丷 开|Gắn chữ 并 với âm tính trong 并且 (và).
+床|chuáng|sàng|广 (nghiễm)|广 木|Gắn chữ 床 với âm sàng trong 起床 (thức dậy).
+应|yīng|ứng|广 (nghiễm)|广 𭕄 一|Gắn chữ 应 với âm ứng trong 适应 (thích nghi).
+度|dù|độ|广 (nghiễm)|广 廿 又|Gắn chữ 度 với âm độ trong 态度 (thái độ).
+开|kāi|khai|廾 (củng)|一 廾|Gắn chữ 开 với âm khai trong 开始 (bắt đầu).
+形|xíng|hình|彡 (sam)|开 彡|Gắn chữ 形 với âm hình trong 情形 (tình hình).
+影|yǐng|ảnh|彡 (sam)|景 彡|Gắn chữ 影 với âm ảnh trong 电影 (phim).
+彻|chè|triệt|彳 (xích)|彳 切|Gắn chữ 彻 với âm triệt trong 贯彻 (quán triệt).
+得|dé|đắc|彳 (xích)|彳 㝵|Gắn chữ 得 với âm đắc trong 觉得 (cảm thấy).
+心|xīn|tâm|心 (tâm)|㇒ 乚 丶 丶|Gắn chữ 心 với âm tâm trong 关心 (quan tâm).
+必|bì|tất|心 (tâm)|心 ㇒|Gắn chữ 必 với âm tất trong 必须 (phải).
+快|kuài|khoái|忄 (tâm)|忄 夬|Gắn chữ 快 với âm khoái trong 快乐 (vui vẻ).
+念|niàn|niệm|心 (tâm)|今 心|Gắn chữ 念 với âm niệm trong 概念 (khái niệm).
+怀|huái|hoài|忄 (tâm)|忄 不|Gắn chữ 怀 với âm hoài trong 关怀 (quan tâm).
+态|tài|thái|心 (tâm)|太 心|Gắn chữ 态 với âm thái trong 态度 (thái độ).
+思|sī|tư|心 (tâm)|田 心|Gắn chữ 思 với âm tư trong 意思 (ý).
+情|qíng|tình|忄 (tâm)|忄 青|忄 là tấm lòng, 青 gợi âm. Nhớ tình cảm là điều cảm được trong lòng.
+惯|guàn|quen|忄 (tâm)|忄 贯|Gắn chữ 惯 với âm quen trong 习惯 (quen với).
+想|xiǎng|tưởng|心 (tâm)|相 心|Gắn chữ 想 với âm tưởng trong 想象 (tưởng tượng).
+意|yì|ý|心 (tâm)|音 心|音 ở trên 心. Tưởng tượng ý nghĩ trong lòng sắp thành tiếng.
+感|gǎn|cảm|心 (tâm)|咸 心|Có 心 ở dưới. Nhớ cảm xúc, cảm động và cảm ơn đều chạm tới trái tim.
+成|chéng|thành|戈 (qua)|戊 𠃌|Gắn chữ 成 với âm thành trong 成功 (thành công).
+战|zhàn|chiến|戈 (qua)|占 戈|Gắn chữ 战 với âm chiến trong 挑战 (thách thức).
+所|suǒ|sỡ|戶 (hộ)|戶 斤|Gắn chữ 所 với âm sỡ trong 所以 (cho nên).
+才|cái|tài|手 (thủ)|𬺰 ㇒|Gắn chữ 才 với âm tài trong 刚才 (vừa nãy).
+打|dǎ|đả|扌 (thủ)|扌 丁|Gắn chữ 打 với âm đả trong 打电话 (gọi điện).
+执|zhí|chấp|扌 (thủ)|扌 丸|Gắn chữ 执 với âm chấp trong 执行 (thi hành).
+护|hù|hộ|扌 (thủ)|扌 户|Gắn chữ 护 với âm hộ trong 保护 (bảo vệ).
+报|bào|báo|扌 (thủ)|扌 𠬝|Gắn chữ 报 với âm báo trong 报道 (đưa tin).
+拥|yōng|dùng|扌 (thủ)|扌 用|Gắn chữ 拥 với âm dùng trong 拥有 (sở hữu).
+择|zé|trạch|扌 (thủ)|扌 𠬤|Gắn chữ 择 với âm trạch trong 选择 (chọn).
+持|chí|trì|扌 (thủ)|扌 寺|Gắn chữ 持 với âm trì trong 坚持 (kiên trì).
+按|àn|án|扌 (thủ)|扌 安|Gắn chữ 按 với âm án trong 按照 (dựa theo).
+挑|tiāo|vẹo|扌 (thủ)|扌 兆|Gắn chữ 挑 với âm vẹo trong 挑战 (thách thức).
+排|pái|bài|扌 (thủ)|扌 非|Gắn chữ 排 với âm bài trong 安排 (sắp xếp).
+提|tí|đề|扌 (thủ)|扌 是|Gắn chữ 提 với âm đề trong 提高 (nâng cao).
+改|gǎi|cải|攵 (phộc)|己 攵|Gắn chữ 改 với âm cải trong 改变 (thay đổi).
+效|xiào|hiệu|攵 (phộc)|交 攵|Gắn chữ 效 với âm hiệu trong 效果 (hiệu quả).
+料|liào|liệu|斗 (đẩu)|米 斗|Gắn chữ 料 với âm liệu trong 材料 (vật liệu).
+旁|páng|bàng|方 (phương)|亠 丷 冖 方|Gắn chữ 旁 với âm bàng trong 旁边 (bên cạnh).
+旅|lǚ|lữ|方 (phương)|方 𠂉 𧘇|Gắn chữ 旅 với âm lữ trong 旅游 (du lịch).
+日|rì|nhật|日 (nhật)|囗 一|Gắn chữ 日 với âm nhật trong 生日 (sinh nhật).
+时|shí|thì|日 (nhật)|日 寸|Gắn chữ 时 với âm thì trong 小时 (giờ).
+明|míng|minh|日 (nhật)|日 月|Gắn chữ 明 với âm minh trong 明白 (hiểu rõ).
+是|shì|thị|日 (nhật)|日 𤴓|Gắn chữ 是 với âm thị trong 但是 (nhưng).
+显|xiǎn|hiển|日 (nhật)|日 业|Gắn chữ 显 với âm hiển trong 明显 (rõ ràng).
+景|jǐng|cảnh|日 (nhật)|日 京|Gắn chữ 景 với âm cảnh trong 情景 (tình cảnh).
+暂|zàn|tạm|日 (nhật)|斩 日|Gắn chữ 暂 với âm tạm trong 暂时 (tạm thời).
+最|zuì|tối|冂 (quynh)|日 耳 又|Gắn chữ 最 với âm tối trong 最好 (tốt nhất).
+有|yǒu|hữu|月 (nguyệt)|𠂇 ⺝|Gắn chữ 有 với âm hữu trong 有名 (nổi tiếng).
+朋|péng|bằng|月 (nguyệt)|月 月|Gắn chữ 朋 với âm bằng trong 朋友 (bạn bè).
+望|wàng|vọng|月 (nguyệt)|亡 月 王|Gắn chữ 望 với âm vọng trong 希望 (hy vọng).
+机|jī|cơ|木 (mộc)|木 几|Gắn chữ 机 với âm cơ trong 机会 (cơ hội).
+材|cái|tài|木 (mộc)|木 才|Gắn chữ 材 với âm tài trong 材料 (vật liệu).
+来|lái|lai|木 (mộc)|未 丷|Gắn chữ 来 với âm lai trong 后来 (về sau).
+杯|bēi|bôi|木 (mộc)|木 不|Gắn chữ 杯 với âm bôi trong 杯子 (cốc).
+果|guǒ|quả|木 (mộc)|日 木|Gắn chữ 果 với âm quả trong 如果 (nếu).
+格|gé|cách|木 (mộc)|木 各|Gắn chữ 格 với âm cách trong 资格 (tư cách).
+概|gài|khái|木 (mộc)|木 既|Gắn chữ 概 với âm khái trong 概念 (khái niệm).
+正|zhèng|chính|止 (chỉ)|一 止|Gắn chữ 正 với âm chính trong 改正 (sửa cho đúng).
+此|cǐ|thử|止 (chỉ)|止 匕|Gắn chữ 此 với âm thử trong 因此 (vì vậy).
+步|bù|bộ|止 (chỉ)|止 𣥂|Gắn chữ 步 với âm bộ trong 步骤 (các bước).
+比|bǐ|tỉ|比 (tỷ)|乚 一 匕|Gắn chữ 比 với âm tỉ trong 比较 (so sánh).
+水|shuǐ|thuỷ|水 (thủy)|㇇ 𰛅|Nhớ một dòng nước giữa và nước bắn sang hai bên.
+求|qiú|cầu|氺 (thủy)|一 氺 丶|Gắn chữ 求 với âm cầu trong 要求 (yêu cầu).
+汉|hàn|hán|氵 (thủy)|氵 又|Gắn chữ 汉 với âm hán trong 汉语 (tiếng Trung Quốc).
+法|fǎ|pháp|氵 (thủy)|氵 去|Gắn chữ 法 với âm pháp trong 办法 (cách làm).
+注|zhù|chú|氵 (thủy)|氵 主|Gắn chữ 注 với âm chú trong 注意 (chú ý).
+济|jì|tế|氵 (thủy)|氵 齐|Gắn chữ 济 với âm tế trong 经济 (kinh tế).
+游|yóu|du|氵 (thủy)|氵 斿|Gắn chữ 游 với âm du trong 旅游 (du lịch).
+激|jī|kích|氵 (thủy)|氵 敫|Gắn chữ 激 với âm kích trong 感激 (biết ơn sâu sắc).
+点|diǎn|điểm|灬 (hỏa)|占 灬|Gắn chữ 点 với âm điểm trong 重点 (trọng điểm).
+然|rán|nhiên|灬 (hỏa)|𱼀 犬 灬|Gắn chữ 然 với âm nhiên trong 虽然 (tuy).
+照|zhào|chiếu|灬 (hỏa)|昭 灬|Gắn chữ 照 với âm chiếu trong 按照 (dựa theo).
+爱|ài|ái|爪 (trảo)|爫 冖 友|Hình dung bàn tay dưới mái nhà dang ra che chở cho người mình yêu.
+爸|bà|ba|父 (phụ)|父 巴|Gắn chữ 爸 với âm ba trong 爸爸 (bố).
+状|zhuàng|trạng|犬 (khuyển)|丬 犬|Gắn chữ 状 với âm trạng trong 状况 (tình trạng).
+环|huán|hoàn|玉 (ngọc)|𤣩 不|Gắn chữ 环 với âm hoàn trong 环境 (môi trường).
+现|xiàn|hiện|玉 (ngọc)|𤣩 见|Gắn chữ 现 với âm hiện trong 发现 (phát hiện).
+理|lǐ|lí|玉 (ngọc)|𤣩 里|Gắn chữ 理 với âm lí trong 合理 (hợp lý).
+生|shēng|sinh|生 (sinh)|㇒ 龶|Gắn chữ 生 với âm sinh trong 学生 (học sinh).
+用|yòng|dụng|用 (dụng)|⺆ 𰀁|Gắn chữ 用 với âm dụng trong 采用 (áp dụng).
+电|diàn|điện|田 (điền)|日 乚|Gắn chữ 电 với âm điện trong 打电话 (gọi điện).
+留|liú|lưu|田 (điền)|卯 (lược nét);田|Gắn chữ 留 với âm lưu trong 保留 (giữ lại).
+病|bìng|bệnh|疒 (nạch)|疒 丙|Gắn chữ 病 với âm bệnh trong 生病 (bị ốm).
+白|bái|bạch|白 (bạch)|㇒ 日|Gắn chữ 白 với âm bạch trong 明白 (hiểu rõ).
+相|xiāng|tương|目 (mục)|木 目|Gắn chữ 相 với âm tương trong 相信 (tin).
+看|kàn|khán|目 (mục)|龵 目|Bàn tay che phía trên đôi mắt 目 khi nhìn ra xa.
+真|zhēn|chân|目 (mục)|十 具|Gắn chữ 真 với âm chân trong 认真 (nghiêm túc).
+睡|shuì|thụy|目 (mục)|目 垂|Gắn chữ 睡 với âm thụy trong 睡觉 (ngủ).
+知|zhī|tri|矢 (thỉ)|矢 口|Gắn chữ 知 với âm tri trong 知道 (biết).
+程|chéng|trình|禾 (hòa)|禾 呈|Gắn chữ 程 với âm trình trong 过程 (quá trình).
+立|lì|lập|立 (lập)|亠 䒑|Gắn chữ 立 với âm lập trong 立刻 (lập tức).
+练|liàn|luyện|纟 (mịch)|纟 𫠣|Gắn chữ 练 với âm luyện trong 练习 (luyện tập).
+绍|shào|thiệu|纟 (mịch)|纟 召|Gắn chữ 绍 với âm thiệu trong 介绍 (giới thiệu).
+经|jīng|kinh|纟 (mịch)|纟 𢀖|Nhìn bộ sợi 纟 rồi tưởng tượng một sợi chỉ dẫn mình đi qua nhiều trải nghiệm.
+结|jié|kết|纟 (mịch)|纟 吉|Gắn chữ 结 với âm kết trong 结果 (kết quả).
+绪|xù|tự|纟 (mịch)|纟 者|Gắn chữ 绪 với âm tự trong 情绪 (cảm xúc).
+老|lǎo|lão|耂 (lão)|耂 匕|Gắn chữ 老 với âm lão trong 老师 (thầy).
+考|kǎo|khảo|耂 (lão)|耂 丂|Gắn chữ 考 với âm khảo trong 考试 (kỳ thi).
+而|ér|nhi|而 (nhi)|一 𦓐|Gắn chữ 而 với âm nhi trong 而且 (hơn nữa).
+能|néng|năng|肉 (nhục)|䏍 𫧇|Gắn chữ 能 với âm năng trong 可能 (có thể).
+脆|cuì|thúy|月 (nhục)|月 危|Gắn chữ 脆 với âm thúy trong 干脆 (dứt khoát).
+舞|wǔ|vũ|舛|𠂉 卌 一 舛|Gắn chữ 舞 với âm vũ trong 跳舞 (nhảy múa).
+茶|chá|trà|艹 (thảo)|艹 𠆢 朩|Gắn chữ 茶 với âm trà trong 茶 (trà).
+营|yíng|doanh|艸 (thảo)|𫇦 吕|Gắn chữ 营 với âm doanh trong 经营 (kinh doanh).
+虽|suī|tuy|虫 (trùng)|口 虫|Gắn chữ 虽 với âm tuy trong 虽然 (tuy).
+行|xíng|hàng|行 (hành)|彳 亍|Gắn chữ 行 với âm hàng trong 执行 (thi hành).
+要|yào|yếu|襾 (á)|覀 女|Gắn chữ 要 với âm yếu trong 要求 (yêu cầu).
+见|jiàn|kiến|见 (kiến)|冂 丿 乚|Gắn chữ 见 với âm kiến trong 意见 (ý kiến).
+觉|jué|giác|见 (kiến)|𰃮 见|Gắn chữ 觉 với âm giác trong 睡觉 (ngủ).
+解|jiě|giải|角 (giác)|角 𭷔|Gắn chữ 解 với âm giải trong 了解 (hiểu rõ).
+认|rèn|nhận|讠 (ngôn)|讠 人|Gắn chữ 认 với âm nhận trong 认识 (quen).
+证|zhèng|chứng|讠 (ngôn)|讠 正|Gắn chữ 证 với âm chứng trong 保证 (bảo đảm).
+识|shí|thức|讠 (ngôn)|讠 只|Gắn chữ 识 với âm thức trong 认识 (quen).
+试|shì|thí|讠 (ngôn)|讠 式|Gắn chữ 试 với âm thí trong 考试 (kỳ thi).
+话|huà|thoại|讠 (ngôn)|讠 舌|Gắn chữ 话 với âm thoại trong 打电话 (gọi điện).
+语|yǔ|ngữ|讠 (ngôn)|讠 吾|Gắn chữ 语 với âm ngữ trong 汉语 (tiếng Trung Quốc).
+谢|xiè|tạ|讠 (ngôn)|讠 射|Gắn chữ 谢 với âm tạ trong 感谢 (cảm ơn).
+象|xiàng|tượng|豕 (thỉ)|𠮥 𧰨|Gắn chữ 象 với âm tượng trong 对象 (đối tượng).
+贯|guàn|quan|贝 (bối)|毌 贝|Gắn chữ 贯 với âm quan trong 贯彻 (quán triệt).
+资|zī|tư|贝 (bối)|次 贝|Gắn chữ 资 với âm tư trong 资格 (tư cách).
+赛|sài|tái|贝 (bối)|𡨄 贝|Gắn chữ 赛 với âm tái trong 决赛 (trận chung kết).
+起|qǐ|khởi|走 (tẩu)|走 己|Gắn chữ 起 với âm khởi trong 起床 (thức dậy).
+跳|tiào|khêu|足 (túc)|𧾷 兆|Gắn chữ 跳 với âm khêu trong 跳舞 (nhảy múa).
+践|jiàn|tiễn|足 (túc)|𧾷 戋|Gắn chữ 践 với âm tiễn trong 实践 (thực hành).
+身|shēn|thân|身 (thân)|𨈑 ㇒|Gắn chữ 身 với âm thân trong 身体 (cơ thể).
+较|jiào|giảo|车 (xa)|车 交|Gắn chữ 较 với âm giảo trong 比较 (so sánh).
+边|biān|biên|辶 (sước)|辶 力|Gắn chữ 边 với âm biên trong 旁边 (bên cạnh).
+过|guò|quá|辶 (sước)|辶 寸|Gắn chữ 过 với âm quá trong 过去 (quá khứ).
+运|yùn|vận|辶 (sước)|辶 云|Gắn chữ 运 với âm vận trong 运动 (vận động).
+进|jìn|tiến|辶 (sước)|辶 井|Gắn chữ 进 với âm tiến trong 改进 (cải tiến).
+适|shì|thích|辶 (sước)|辶 舌|Gắn chữ 适 với âm thích trong 合适 (phù hợp).
+选|xuǎn|tuyển|辶 (sước)|辶 先|Gắn chữ 选 với âm tuyển trong 选择 (chọn).
+通|tōng|thông|辶 (sước)|辶 甬|Gắn chữ 通 với âm thông trong 通知 (thông báo).
+道|dào|đạo|辶 (sước)|辶 首|Gắn chữ 道 với âm đạo trong 知道 (biết).
+采|cǎi|thái|釆 (biện)|爫 木|Gắn chữ 采 với âm thái trong 采用 (áp dụng).
+重|zhòng|trọng|里 (lý)|㇒ 車 一|Gắn chữ 重 với âm trọng trong 重要 (quan trọng).
+问|wèn|vấn|门 (môn)|门 口|Gắn chữ 问 với âm vấn trong 问题 (câu hỏi).
+间|jiān|gian|门 (môn)|门 日|Gắn chữ 间 với âm gian trong 时间 (thời gian).
+际|jì|tế|阝 (phụ)|阝 示|Gắn chữ 际 với âm tế trong 实际 (thực tế).
+院|yuàn|viện|阝 (phụ)|阝 完|Gắn chữ 院 với âm viện trong 医院 (bệnh viện).
+难|nán|nan|隹 (chuy)|又 隹|Gắn chữ 难 với âm nan trong 难免 (khó tránh khỏi).
+需|xū|nhu|雨 (vũ)|雨 而|Gắn chữ 需 với âm nhu trong 必需 (thiết yếu).
+须|xū|tua|页 (hiệt)|彡 页|Gắn chữ 须 với âm tua trong 必须 (phải).
+题|tí|đề|页 (hiệt)|是 页|Gắn chữ 题 với âm đề trong 问题 (câu hỏi).
+验|yàn|nghiệm|马 (mã)|马 佥|Gắn chữ 验 với âm nghiệm trong 经验 (kinh nghiệm).
+骤|zhòu|sậu|马 (mã)|马 聚|Gắn chữ 骤 với âm sậu trong 步骤 (các bước).
+高|gāo|cao|高 (cao)|亠 口 冋|Gắn chữ 高 với âm cao trong 提高 (nâng cao).
