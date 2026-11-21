@@ -15,3 +15,11 @@
 - Hai lần khởi động API với PostgreSQL giữ nguyên 182 từ (169 từ thuộc HSK 1–5), 246 chữ, 350 liên kết chữ, 25 mẫu ngữ pháp với ví dụ và 18 cặp từ. `python scripts/import_hsk_data.py` đã nhập thử toàn bộ danh mục CTI trên SQLite và giữ nguyên trạng thái thẻ có sẵn.
 - `npm install --no-audit --no-fund` tạo lockfile cho frontend. `docker compose config` trả mã 0 với Docker CLI cục bộ và Compose v2.40.3.
 - Commit `feat: scaffold monorepo, database schema, and HSK seeds` trên `main`. Chờ các giai đoạn sau trước khi đẩy lên GitHub.
+
+## Giai đoạn 2
+
+- Đã nối 20 đường dẫn REST, gồm FSRS 6.3.3, hàng đợi ôn theo nguồn/cấp độ, nhập tài liệu theo hai luồng, câu i+1 có kiểm tra từ đã biết, chấm bài, trình đọc, cây chữ và tiến độ.
+- Dịch vụ nạp dùng danh mục CTI để xác định cấp HSK. Xác nhận nạp chạy trong giao dịch và dùng cùng ID từ, mẫu câu và câu ví dụ khi nạp lại.
+- `python -m compileall -q app` và sinh OpenAPI đã qua. `python -m pytest -q -o pythonpath=. .pytest_cache/test_phase2_services.py` chạy 7 kiểm tra dịch vụ AI/nạp với dữ liệu giả lập bên ngoài.
+- Smoke test FastAPI với PostgreSQL 16.16 đã qua cho 7 lựa chọn chế độ ôn, gửi lại đánh giá không tạo lượt thứ hai, đọc văn bản, cây chữ, tiến độ, cặp từ, lấy 5 từ và trường hợp thiếu khóa Gemini. Gọi Edge TTS thật trả MP3 và lượt gọi sau lấy lại cùng nội dung và ETag từ cache.
+- Commit `feat: implement study engine, ingestion, and HSK APIs` trên `main`. Chờ hoàn thành frontend và xác minh cuối.
