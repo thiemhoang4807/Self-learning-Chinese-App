@@ -327,6 +327,28 @@ td > :not(:first-child) { margin-top: .42rem; }
 .source-row + .source-row { border-top: 1px solid var(--border); }
 .source-row h3 { margin-block: .1rem .24rem; overflow-wrap: anywhere; }
 .source-row .muted { font-size: .89rem; }
+.source-actions { justify-content: flex-end; max-width: 17rem; gap: .35rem; }
+.source-actions .button { white-space: nowrap; }
+.source-actions .button-quiet { font-size: .88rem; }
+
+.edit-modal {
+  position: fixed; inset: 0; margin: auto; width: min(34rem, calc(100% - 1.5rem)); max-height: calc(100dvh - 2rem);
+  overflow: auto; border: 1px solid var(--border); border-radius: var(--radius);
+  color: var(--text); background: var(--surface); box-shadow: 0 20px 66px #0b23194d;
+}
+.edit-modal::backdrop { background: #0a1a16a0; }
+.modal-content { display: grid; gap: .95rem; padding: clamp(.9rem, 4vw, 1.45rem); }
+.modal-content > .split > .button { flex: none; }
+.editor-hanzi { font: 690 1.42rem/1.4 var(--hanzi); }
+.vault-record { display: grid; gap: .45rem; }
+.vault-record + .vault-record { padding-block-start: .9rem; border-top: 1px solid var(--border); }
+.vault-record-hanzi { font-size: 1.22rem; font-weight: 650; }
+.example-actions { justify-content: flex-end; align-self: start; flex: none; }
+.restore-summary { display: grid; gap: .55rem; background: var(--surface-subtle); border-radius: .7rem; padding: .8rem; }
+.restore-summary dl { margin: 0; display: grid; gap: .3rem; }
+.restore-summary dl > div { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .2rem .6rem; }
+.restore-summary dt { font-weight: 650; }
+.restore-summary dd { margin: 0; color: var(--muted); }
 
 .tool-nav { display: flex; flex-wrap: wrap; gap: .48rem; }
 .tool-nav a {
@@ -466,7 +488,8 @@ span.legend-ingested::before { background: #6384b7; }
   .tool-nav a { font-size: .84rem; padding-inline: .55rem; }
   .tool-nav a svg { width: 1rem; }
   .source-row { grid-template-columns: auto minmax(0, 1fr); }
-  .source-row .button { grid-column: 2; }
+  .source-row .source-actions { grid-column: 2; justify-content: flex-start; max-width: none; }
+  .example-actions { flex: 0 1 auto; min-width: 3rem; }
   .stage-group-title { align-items: start; }
   .rating-grid { grid-template-columns: repeat(2, 1fr); }
   .rating-grid .button { min-height: 2.88rem; }

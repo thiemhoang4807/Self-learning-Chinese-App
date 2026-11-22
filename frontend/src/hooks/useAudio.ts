@@ -1,45 +1,44 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { audioUrl } from '../lib/api'
+import { startPlayback } from '../lib/audio'
 
 export function useAudio() {
-  const active = useRef<HTMLAudioElement | null>(null)
+  const active = useRef<{ cancel: () => void } | null>(null)
   const [playing, setPlaying] = useState(false)
   const [error, setError] = useState('')
 
   const stop = useCallback(() => {
-    const audio = active.current
+    const request = active.current
     active.current = null
-    audio?.pause()
+    request?.cancel()
     setPlaying(false)
   }, [])
 
-  useEffect(() => () => active.current?.pause(), [])
+  useEffect(() => () => {
+    active.current?.cancel()
+    active.current = null
+  }, [])
 
   const play = useCallback((text: string, rate = 1, onEnded?: () => void) => {
     stop()
     setError('')
-    if (!text.trim()) return
-    const audio = new Audio(audioUrl(text, rate))
-    active.current = audio
-    const fail = (message: string) => {
-      if (active.current !== audio) return
-      stop()
-      setError(message)
-    }
-    audio.onplaying = () => {
-      if (active.current === audio) setPlaying(true)
-    }
-    audio.onended = () => {
-      if (active.current !== audio) return
-      stop()
-      onEnded?.()
-    }
-    audio.onerror = () => fail('Chưa phát được âm thanh. Bạn có thể tiếp tục học hoặc thử lại.')
-    void audio.play().catch(cause => fail(
-      cause instanceof DOMException && cause.name === 'NotAllowedError'
-        ? 'Bấm nút nghe để phát âm thanh.'
-        : 'Chưa phát được âm thanh. Bạn có thể tiếp tục học hoặc thử lại.',
-    ))
+    const request = { cancel: () => {} }
+    active.current = request
+    request.cancel = startPlayback({
+      url: audioUrl(text, rate),
+      text,
+      rate,
+      onPlaying: () => {
+        if (active.current === request) setPlaying(true)
+      },
+      onSettled: message => {
+        if (active.current !== request) return
+        active.current = null
+        setPlaying(false)
+        setError(message ?? '')
+        onEnded?.()
+      },
+    })
   }, [stop])
 
   return { play, stop, error, playing }

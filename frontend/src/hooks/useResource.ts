@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { api, errorMessage } from '../lib/api'
 
-export function useResource<T>(path: string | null) {
+const loadResource = <T,>(path: string, signal: AbortSignal) => api<T>(path, { signal })
+
+export function useResource<T>(path: string | null, load: (path: string, signal: AbortSignal) => Promise<T> = loadResource<T>) {
   const [data, setData] = useState<T | null>(null)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(Boolean(path))
@@ -16,7 +18,7 @@ export function useResource<T>(path: string | null) {
     }
     const controller = new AbortController()
     setLoading(true)
-    api<T>(path, { signal: controller.signal })
+    load(path, controller.signal)
       .then(result => {
         if (!controller.signal.aborted) setData(result)
       })
@@ -27,7 +29,7 @@ export function useResource<T>(path: string | null) {
         if (!controller.signal.aborted) setLoading(false)
       })
     return () => controller.abort()
-  }, [path, revision])
+  }, [path, revision, load])
 
   return { data, setData, error, loading, reload: () => setRevision(value => value + 1) }
 }

@@ -6,13 +6,20 @@ export class ApiError extends Error {
   }
 }
 
-export async function api<T>(path: string, options?: { body?: unknown; signal?: AbortSignal }): Promise<T> {
+interface RequestOptions {
+  method?: 'GET' | 'POST' | 'PATCH' | 'DELETE'
+  body?: unknown
+  signal?: AbortSignal
+  acceptStatus?: number
+}
+
+export async function requestApi(path: string, options?: RequestOptions): Promise<Response> {
   const body = options?.body
   const multipart = body instanceof FormData
   let response: Response
   try {
     response = await fetch('/api' + path, {
-      method: body === undefined ? 'GET' : 'POST',
+      method: options?.method ?? (body === undefined ? 'GET' : 'POST'),
       signal: options?.signal,
       headers: body === undefined || multipart ? undefined : { 'Content-Type': 'application/json' },
       body: body === undefined ? undefined : multipart ? body : JSON.stringify(body),
@@ -22,7 +29,7 @@ export async function api<T>(path: string, options?: { body?: unknown; signal?: 
     throw new ApiError(0, 'Chưa kết nối được với máy chủ. Bạn thử lại nhé.')
   }
 
-  if (response.ok) return response.json() as Promise<T>
+  if (response.ok || response.status === options?.acceptStatus) return response
   const payload = await response.json().catch(() => null)
   const detail = payload?.detail
   const viDetail = typeof detail === 'string' && /[À-ỹ]/u.test(detail) ? detail : null
@@ -34,6 +41,11 @@ export async function api<T>(path: string, options?: { body?: unknown; signal?: 
         ? 'Dịch vụ đang bận. Bạn thử lại sau một chút nhé.'
         : 'Chưa thực hiện được thao tác này. Bạn thử lại nhé.'
   throw new ApiError(response.status, viDetail || fallback)
+}
+
+export async function api<T>(path: string, options?: RequestOptions): Promise<T> {
+  const response = await requestApi(path, options)
+  return response.status === 204 ? undefined as T : response.json() as Promise<T>
 }
 
 export function errorMessage(error: unknown): string {

@@ -3,6 +3,7 @@ import type { DragEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { ClipboardPaste, FileText, HardDriveUpload, Save, UploadCloud } from 'lucide-react'
 import { useExperience } from '../components/Experience'
+import { SourceActions } from '../components/SourceActions'
 import { Button, Empty, ErrorNotice, LevelBadge, Loading, PageTitle, Panel } from '../components/ui'
 import { useResource } from '../hooks/useResource'
 import { api, errorMessage, withQuery } from '../lib/api'
@@ -267,7 +268,12 @@ export function Ingest() {
           <p className="muted">{sourceLabels[source.source_type]} · {dateLabel(source.created_at)} · {source.word_count} từ · {source.pattern_count} mẫu · {source.sentence_count} câu</p>
           {source.summary_note && <p>{source.summary_note}</p>}
         </div>
-        <Link to={withQuery('/hoc', { source_id: source.id, size: 10 })} className="button button-secondary">Ôn theo nguồn</Link>
+        <div className="source-actions actions">
+          <Link to={withQuery('/hoc', { source_id: source.id, size: 10 })} className="button button-secondary">Ôn theo nguồn</Link>
+          <SourceActions source={source}
+            onUpdated={updated => sources.setData(current => current?.map(item => item.id === updated.id ? updated : item) ?? null)}
+            onDeleted={id => sources.setData(current => current?.filter(item => item.id !== id) ?? null)} />
+        </div>
       </article>)}
     </Panel>
   </div>

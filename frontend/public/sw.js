@@ -1,4 +1,4 @@
-const cacheName = 'hoc-trung-app-v1'
+const cacheName = 'hoc-trung-app-v2'
 
 self.addEventListener('install', event => {
   event.waitUntil((async () => {

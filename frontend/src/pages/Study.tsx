@@ -3,12 +3,13 @@ import type { FormEvent } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { AudioLines, Check, Eye, Lightbulb, Sparkles, Volume2, X } from 'lucide-react'
 import { CharacterDetails, Hanzi, Pinyin, useExperience } from '../components/Experience'
+import { EditKnowledgeButton } from '../components/KnowledgeEditor'
 import { PairClozeQuestions } from '../components/PairClozeQuestions'
 import { Button, Empty, ErrorNotice, Loading, Notice, PageTitle, Panel, Speaker } from '../components/ui'
 import { useAudio, usePreloadAudio } from '../hooks/useAudio'
 import { useResource } from '../hooks/useResource'
 import { api, errorMessage, reviewToken, withQuery } from '../lib/api'
-import type { Card, DrillMode, Rating, ReverseFeedback, Sentence } from '../types'
+import type { Card, DrillMode, Pattern, Rating, ReverseFeedback, Sentence, Word } from '../types'
 
 const labels: Record<DrillMode, string> = {
   flashcard: 'Nhận diện mặt chữ',
@@ -56,7 +57,8 @@ export function Study() {
   </div>
 }
 
-function StudySession({ cards, onRestart }: { cards: Card[]; onRestart: () => void }) {
+function StudySession({ cards: initialCards, onRestart }: { cards: Card[]; onRestart: () => void }) {
+  const [cards, setCards] = useState(initialCards)
   const [index, setIndex] = useState(0)
   const [saving, setSaving] = useState(false)
   const [unsaved, setUnsaved] = useState<ReviewInput | null>(null)
@@ -96,16 +98,56 @@ function StudySession({ cards, onRestart }: { cards: Card[]; onRestart: () => vo
     void sendReview(input)
   }
 
+  function saveWord(word: Word) {
+    setCards(current => current.flatMap((item, position) => {
+      if (item.item_type !== 'word' || item.item_id !== word.id) return [item]
+      if (word.status === 'ignored' && position >= index) return []
+      return [{
+        ...item,
+        pinyin: item.hanzi === word.simplified ? word.pinyin : item.pinyin,
+        han_viet: word.han_viet,
+        meaning_vi: word.meaning_vi,
+        mnemonic_vi: word.mnemonic_vi,
+        usage_note_vi: word.usage_note_vi,
+        status: word.status ?? item.status,
+      }]
+    }))
+  }
+
+  function savePattern(pattern: Pattern) {
+    setCards(current => current.map(item => item.item_type === 'pattern' && item.item_id === pattern.id
+      ? {
+          ...item,
+          meaning_vi: item.sentence_id === null ? pattern.explanation_vi : item.meaning_vi,
+          usage_note_vi: item.sentence_id === null ? pattern.structure_notes_vi : pattern.explanation_vi,
+        }
+      : item))
+  }
+
+  function saveSentence(sentence: Sentence) {
+    setCards(current => current.map(item => {
+      const updated = { ...item, sentences: item.sentences.map(previous => previous.id === sentence.id ? sentence : previous) }
+      if (item.sentence_id !== sentence.id) return updated
+      return {
+        ...updated,
+        pinyin: sentence.pinyin,
+        meaning_vi: item.item_type === 'pattern' ? sentence.meaning_vi : item.meaning_vi,
+        prompt: item.mode === 'reverse' || item.mode === 'reorder' ? sentence.meaning_vi : item.prompt,
+      }
+    }))
+  }
+
   return <>
     {unsaved && <ErrorNotice message={'Chưa lưu được lần ôn vừa rồi. ' + reviewError} retry={() => void sendReview(unsaved)} />}
     <div className="study-progress">
       <div className="split"><span>{card ? labels[card.mode] : 'Hoàn thành'}</span><span>{Math.min(index + 1, cards.length)} / {cards.length}</span></div>
-      <progress aria-label="Tiến độ buổi ôn" max={cards.length} value={index} />
+      <progress aria-label="Tiến độ buổi ôn" max={Math.max(cards.length, 1)} value={index} />
     </div>
-    {card ? <ReviewCard key={index} card={card} onRate={rate} ratingDisabled={saving || Boolean(unsaved)} />
+    {card ? <ReviewCard key={card.id} card={card} onRate={rate} ratingDisabled={saving || Boolean(unsaved)}
+      onWordSaved={saveWord} onPatternSaved={savePattern} onSentenceSaved={saveSentence} />
       : <Panel className="session-done">
         <span className="feature-icon"><Check size={24} /></span>
-        <h2>Bạn đã ôn {cards.length} thẻ</h2>
+        <h2>{cards.length ? 'Bạn đã ôn ' + cards.length + ' thẻ' : 'Không còn thẻ trong buổi ôn'}</h2>
         {saving && <Loading label="Đang lưu kết quả…" />}
         <div className="actions">
           <Link className="button button-primary" to="/">Về Học hôm nay</Link>
@@ -115,10 +157,13 @@ function StudySession({ cards, onRestart }: { cards: Card[]; onRestart: () => vo
   </>
 }
 
-function ReviewCard({ card, onRate, ratingDisabled }: {
+function ReviewCard({ card, onRate, ratingDisabled, onWordSaved, onPatternSaved, onSentenceSaved }: {
   card: Card
   onRate: (rating: Rating, responseTime: number) => void
   ratingDisabled: boolean
+  onWordSaved: (word: Word) => void
+  onPatternSaved: (pattern: Pattern) => void
+  onSentenceSaved: (sentence: Sentence) => void
 }) {
   const { preferences } = useExperience()
   const audio = useAudio()
@@ -306,6 +351,11 @@ function ReviewCard({ card, onRate, ratingDisabled }: {
             <Hanzi text={character.char} /><CharacterDetails character={character} pinyinVisible={pinyinVisible} />
           </div>)}
         </details>}
+        <div className="actions">
+          {card.item_type === 'word' && <EditKnowledgeButton kind="word" id={card.item_id} onSaved={onWordSaved} />}
+          {card.item_type === 'pattern' && <EditKnowledgeButton kind="pattern" id={card.item_id} onSaved={onPatternSaved} />}
+          {card.sentence_id !== null && <EditKnowledgeButton kind="sentence" id={card.sentence_id} onSaved={onSentenceSaved} />}
+        </div>
       </div>}
 
       {!revealed && mode !== 'flashcard' && <Button className="reveal-button" variant="quiet" disabled={busy} onClick={flip}><Eye size={18} />Xem đáp án</Button>}
@@ -320,7 +370,7 @@ function ReviewCard({ card, onRate, ratingDisabled }: {
           <kbd>{option.value}</kbd>{option.label}
         </Button>)}
       </div>
-      <ExampleSentences card={card} pinyinOverride={pinyin} />
+      <ExampleSentences card={card} pinyinOverride={pinyin} onSentenceSaved={onSentenceSaved} />
     </>}
 
     <div className="keyboard-guide" aria-label="Phím tắt">
@@ -335,7 +385,11 @@ function pairLines(value: string): [string, string] {
   return [first, second]
 }
 
-function ExampleSentences({ card, pinyinOverride }: { card: Card; pinyinOverride: boolean | null }) {
+function ExampleSentences({ card, pinyinOverride, onSentenceSaved }: {
+  card: Card
+  pinyinOverride: boolean | null
+  onSentenceSaved: (sentence: Sentence) => void
+}) {
   const [generated, setGenerated] = useState<Sentence[]>([])
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
@@ -365,7 +419,13 @@ function ExampleSentences({ card, pinyinOverride }: { card: Card; pinyinOverride
           <Pinyin text={sentence.pinyin} visible={pinyinOverride ?? undefined} />
           <p>{sentence.meaning_vi}</p>
         </div>
-        <Speaker text={sentence.hanzi} />
+        <div className="actions example-actions">
+          <Speaker text={sentence.hanzi} />
+          <EditKnowledgeButton kind="sentence" id={sentence.id} label="Sửa câu" onSaved={updated => {
+            setGenerated(current => current.map(item => item.id === updated.id ? updated : item))
+            onSentenceSaved(updated)
+          }} />
+        </div>
       </div>)}
     </div>}
     <ErrorNotice message={error} />

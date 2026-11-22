@@ -2,13 +2,15 @@ import { useState } from 'react'
 import { Flame, Plus, Settings2, Target } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Hanzi, useExperience } from '../components/Experience'
+import { BackupPanel } from '../components/BackupPanel'
 import { Button, Empty, ErrorNotice, Loading, PageTitle, Pager, Panel, StatusBadge } from '../components/ui'
 import { useResource } from '../hooks/useResource'
-import { errorMessage, queueItems, withQuery } from '../lib/api'
-import type { Dashboard, HskLevel, PageResult, Settings, Word } from '../types'
+import { api, errorMessage, queueItems, withQuery } from '../lib/api'
+import type { Dashboard, Health, HskLevel, PageResult, Word } from '../types'
 import { PaceNote } from './Home'
 
 const gapPageSize = 24
+const loadHealth = (path: string, signal: AbortSignal) => api<Health>(path, { signal, acceptStatus: 503 })
 
 export function Progress() {
   const resource = useResource<Dashboard>('/dashboard')
@@ -43,7 +45,7 @@ export function Progress() {
         </div>)}
       </Panel>
     </>}
-    <PreferencesPanel />
+    <PreferencesPanel onRestored={resource.reload} />
   </div>
 }
 
@@ -108,10 +110,29 @@ function GapFiller({ level }: { level: number }) {
   </Panel>
 }
 
-function PreferencesPanel() {
-  const { preferences, toggleTheme, togglePinyin } = useExperience()
-  const resource = useResource<Settings>('/settings')
-  return <Panel>
+function PreferencesPanel({ onRestored }: { onRestored: () => void }) {
+  const { preferences, toggleTheme, togglePinyin, flushPreferences, preferenceError } = useExperience()
+  const resource = useResource<Health>('/health', loadHealth)
+  const [geminiCheck, setGeminiCheck] = useState('')
+  const [geminiError, setGeminiError] = useState('')
+  const [checking, setChecking] = useState(false)
+
+  async function checkGemini() {
+    if (checking) return
+    setChecking(true)
+    setGeminiError('')
+    setGeminiCheck('')
+    try {
+      const ready = await api<{ status: 'ok'; model: string }>('/health/gemini', { body: {} })
+      setGeminiCheck('Gemini đã phản hồi bằng mô hình ' + ready.model + '.')
+    } catch (cause) {
+      setGeminiError(errorMessage(cause))
+    } finally {
+      setChecking(false)
+    }
+  }
+
+  return <><Panel>
     <div className="section-heading"><Settings2 size={23} /><h2>Cài đặt</h2></div>
     <div className="setting-row">
       <div><h3 id="pinyin-setting">Hiện Pinyin mặc định</h3><p>Áp dụng cho thẻ, câu ví dụ và trình đọc.</p></div>
@@ -121,6 +142,20 @@ function PreferencesPanel() {
       <div><h3 id="theme-setting">Giao diện tối</h3></div>
       <Button className="switch" role="switch" aria-checked={preferences.theme === 'dark'} aria-labelledby="theme-setting" onClick={toggleTheme}><span /></Button>
     </div>
+    <ErrorNotice message={preferenceError && 'Chưa đồng bộ được cài đặt. ' + preferenceError}
+      retry={() => { void flushPreferences().catch(() => {}) }} />
+    <div className="setting-row">
+      <div><h3>Cơ sở dữ liệu</h3>
+        {resource.data && <p>
+          {resource.data.hsk_word_count?.toLocaleString('vi-VN') ?? '—'} từ HSK · {resource.data.tts_cache_count?.toLocaleString('vi-VN') ?? '—'} tệp âm thanh đã lưu
+        </p>}
+      </div>
+      {resource.data && <span className={'status ' + (resource.data.database === 'ok' ? 'status-mastered' : 'status-learning')}>
+        {resource.data.database === 'ok' ? 'Đang kết nối' : 'Mất kết nối'}
+      </span>}
+      {resource.error && <span className="status status-unknown">Chưa kiểm tra được</span>}
+    </div>
+    {!resource.loading && !resource.error && <Button variant="quiet" onClick={resource.reload}>Kiểm tra lại hệ thống</Button>}
     <div className="setting-row">
       <div><h3>Gemini</h3>
         {resource.data && <p>{resource.data.gemini_configured ? resource.data.gemini_model : 'Thêm GEMINI_API_KEY vào tệp .env của máy chủ để bật trích xuất và chấm bài.'}</p>}
@@ -129,5 +164,12 @@ function PreferencesPanel() {
       {resource.data && <span className={'status ' + (resource.data.gemini_configured ? 'status-mastered' : 'status-unknown')}>{resource.data.gemini_configured ? 'Đã cấu hình' : 'Chưa cấu hình'}</span>}
     </div>
     <ErrorNotice message={resource.error} retry={resource.reload} />
+    {resource.data?.gemini_configured && <Button disabled={checking} onClick={() => void checkGemini()}>
+      {checking ? 'Đang kiểm tra…' : 'Kiểm tra Gemini'}
+    </Button>}
+    {geminiCheck && <p role="status">{geminiCheck}</p>}
+    <ErrorNotice message={geminiError} />
   </Panel>
+    <BackupPanel onRestored={() => { onRestored(); resource.reload() }} />
+  </>
 }

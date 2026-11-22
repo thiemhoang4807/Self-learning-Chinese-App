@@ -4,7 +4,7 @@
 
 - FastAPI, SQLAlchemy 2 và Alembic quản lý lược đồ PostgreSQL 16. Từ, mẫu câu và câu ví dụ dùng chung khóa chính qua các bảng liên kết nguồn. Thẻ và lịch sử ôn được lưu riêng theo loại mục và ID.
 - Backend cập nhật lược đồ bằng Alembic khi container khởi động. Dữ liệu mẫu được nạp trong giao dịch với khóa PostgreSQL để hỗ trợ khởi động lặp lại.
-- React 18 và Vite phục vụ qua Nginx. Nginx chuyển tiếp `/api/` sang backend cùng origin. Compose mặc định chỉ mở cổng web trên loopback cho ứng dụng cá nhân.
+- React 18 và Vite phục vụ qua Nginx. Nginx chuyển tiếp `/api/` sang backend cùng origin. Compose mặc định mở cổng giao diện cho thiết bị cùng mạng, với địa chỉ bind và cổng lấy từ `.env`.
 - Tiến độ dùng khung HSK 2.0 theo yêu cầu, với mục tiêu 2.500 từ cho HSK 1–5 và bài viết kiểu câu 99. Dữ liệu bổ sung đi qua trình nhập CSV hoặc JSON.
 
 ## Giai đoạn 1
@@ -43,3 +43,16 @@
 ## Đồng bộ GitHub ngày 22/11/2026
 
 - `git push -u origin main` thành công và thiết lập upstream `origin/main`. `git ls-remote origin refs/heads/main` xác nhận bản ứng dụng đã xác minh tại `dba0867feff916db579b37d75932728545cd9617`.
+
+## Củng cố vận hành và bảo toàn tiến độ ngày 22/11/2026
+
+- `git pull --ff-only origin main` xác nhận workspace đã đồng bộ từ `5e89327`. Migration `0002` được tạo bằng `alembic revision --autogenerate` và bổ sung định danh sao lưu ổn định cho nguồn, lượt ôn và bài viết, cùng bảng tùy chọn người học. Tệp `0001` giữ nguyên.
+- Compose giữ tên volume `postgres_data` và `audio_data`, kiểm tra sức khỏe PostgreSQL trước khi khởi động backend và hỗ trợ `WEB_BIND_HOST`, `WEB_PORT`. Backend Dockerfile cài LibreOffice, Noto CJK và fontconfig với `fc-cache -fv`. Mỗi lượt chuyển đổi dùng hồ sơ LibreOffice tạm riêng. `SEED_FULL_HSK=true` mặc định thêm những mục CTI còn thiếu và giữ dữ liệu học đã lưu.
+- Thêm chỉnh sửa từ, mẫu ngữ pháp, câu ví dụ và nguồn. Ẩn hoặc bật lại từ dùng cùng thẻ FSRS. Xóa nguồn gỡ các liên kết tới nguồn đó và giữ kho cùng lịch sử học.
+- Thêm sao lưu/khôi phục JSON toàn bộ đồ thị học, FSRS, bài viết và tùy chọn. Khôi phục kiểm tra tham chiếu trước khi ghi và dùng chung khóa giao dịch với các thao tác cập nhật. Nhập lại giữ nguyên số bản ghi, một bản sao cũ giữ được lịch ôn mới hơn trong đích. `scripts/backup_postgres.sh` tạo bản PostgreSQL dạng custom dump và giữ nguyên tệp đích nếu đã tồn tại.
+- Edge TTS giới hạn 10 giây, tái sử dụng MP3 và ETag, trả tín hiệu dự phòng có cấu trúc. Trình duyệt dùng Web Speech tiếng Trung và chế độ Học Lười tiếp tục chạy nếu thiết bị thiếu giọng. Gemini có timeout, thử lại lỗi máy chủ tạm thời, lỗi tiếng Việt và kiểm tra model riêng. PDF 33 trang đã được kiểm thử thực với lô bốn trang và kích thước tối đa 1.600 px, dùng phản hồi Gemini trong kiểm thử.
+- `python -m alembic upgrade head` và `python -m alembic check` đã qua trên SQLite và PostgreSQL 16.16, gồm bản có dữ liệu từ `0001`. Đối chiếu PostgreSQL cho thấy số thẻ, lượt ôn và nội dung FSRS trùng với trước nâng cấp.
+- `python -m pytest -q --tb=short --basetemp <thư mục kiểm thử mới trong .local>` trả **35 passed**, gồm 16 ca trước đây. Thư mục tạm riêng tránh lỗi quyền truy cập thư mục tạm của Windows. Trong `frontend`, `npm test` trả **10 passed**. `npm run typecheck`, `npm run build` và `node --check dist/sw.js` đều qua.
+- `docker compose config` và `docker compose config --services` đều qua. Kiểm tra cấu hình mặc định trả `0.0.0.0:8080`, cấu hình thử ghi đè trả `127.0.0.1:8092`. `bash -n scripts/backup_postgres.sh` qua. `pg_dump --format=custom` và `pg_restore --list` đã kiểm tra tệp dump trên PostgreSQL cục bộ.
+- API đã xuất và khôi phục vào PostgreSQL trống 2.511 từ, một nguồn, 13 thẻ và một lượt ôn trong dữ liệu mẫu, sau đó nhập lại và xác nhận giữ nguyên số bản ghi cùng FSRS. Bản dựng Vite hiển thị trạng thái hệ thống và mục sao lưu trong trình duyệt. Kiểm tra download trực tiếp trong trình duyệt bị gián đoạn, còn API tải và nhập JSON đã qua kiểm thử.
+- `docker version` báo thiếu Docker Engine. Kiểm thử dựng ảnh container và phông CJK khi LibreOffice chạy thật cần môi trường có Docker Engine. Kiểm thử gọi Gemini thật cần `GEMINI_API_KEY` hợp lệ.

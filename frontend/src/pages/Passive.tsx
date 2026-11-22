@@ -43,20 +43,17 @@ function Player({ cards }: { cards: Card[] }) {
   const card = cards[index]
   const audio = useAudio()
   const { play, stop } = audio
-  const audioError = audio.error
   const currentAudio = card.audio_text || card.hanzi
   usePreloadAudio(cards.slice(index + 1, index + 4).map(value => value.audio_text || value.hanzi), rate)
 
   useEffect(() => {
-    if (audioError) setPlaying(false)
-  }, [audioError])
+    if (!playing || phase !== 'audio') return
+    play(currentAudio, rate, () => setPhase('recall'))
+    return stop
+  }, [playing, phase, currentAudio, rate, index, play, stop])
 
   useEffect(() => {
-    if (!playing) return
-    if (phase === 'audio') {
-      play(currentAudio, rate, () => setPhase('recall'))
-      return stop
-    }
+    if (!playing || phase === 'audio') return
     const timer = window.setTimeout(() => {
       if (phase === 'recall') {
         setPhase('revealed')
@@ -71,17 +68,20 @@ function Player({ cards }: { cards: Card[] }) {
       }
     }, phase === 'recall' ? delay * 1000 : 2900)
     return () => window.clearTimeout(timer)
-  }, [playing, phase, currentAudio, rate, index, cards.length, loop, delay, play, stop])
+  }, [playing, phase, index, cards.length, loop, delay])
 
   function move(step: number) {
     const next = index + step
     if (!loop && (next < 0 || next >= cards.length)) return
+    if ((next + cards.length) % cards.length === index && phase === 'audio') return
+    stop()
     setFinished(false)
     setIndex((next + cards.length) % cards.length)
     setPhase('audio')
   }
 
   function togglePlay() {
+    if (playing) stop()
     if (finished) {
       setFinished(false)
       setIndex(0)
@@ -141,7 +141,8 @@ function Player({ cards }: { cards: Card[] }) {
         </label>
         <Button aria-pressed={loop} onClick={() => setLoop(value => !value)}><Repeat2 size={18} />Lặp danh sách</Button>
       </div>
-      <ErrorNotice message={audio.error || error} />
+      <ErrorNotice message={audio.error} />
+      <ErrorNotice message={error} />
       <Button variant="quiet" disabled={marking || marked.includes(card.id)} onClick={() => void mark()}>
         {marked.includes(card.id) ? <><Check size={18} />Đã đánh dấu chưa nhớ</> : 'Đánh dấu chưa nhớ'}
       </Button>

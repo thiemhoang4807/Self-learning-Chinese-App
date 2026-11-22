@@ -3,16 +3,15 @@ import type { ReactNode } from 'react'
 import { Plus, X } from 'lucide-react'
 import { errorMessage, queueItems } from '../lib/api'
 import { useResource } from '../hooks/useResource'
-import type { Character, Word } from '../types'
+import { usePreferences } from '../hooks/usePreferences'
+import type { Character, Preferences, Word } from '../types'
 import { Button, Empty, ErrorNotice, Loading, Speaker, StatusBadge } from './ui'
-
-interface Preferences {
-  theme: 'light' | 'dark'
-  pinyin: boolean
-}
 
 interface Experience {
   preferences: Preferences
+  preferenceError: string
+  flushPreferences: () => Promise<void>
+  applyRestoredPreferences: (saved: Preferences) => void
   toggleTheme: () => void
   togglePinyin: () => void
   showCharacter: (value: string) => void
@@ -20,30 +19,11 @@ interface Experience {
 }
 
 const ExperienceContext = createContext<Experience | null>(null)
-const preferenceKey = 'mandarin-study.preferences'
-
-function initialPreferences(): Preferences {
-  try {
-    const saved = JSON.parse(localStorage.getItem(preferenceKey) || '{}')
-    return {
-      theme: saved.theme === 'dark' ? 'dark' : 'light',
-      pinyin: saved.pinyin === true,
-    }
-  } catch {
-    return { theme: 'light', pinyin: false }
-  }
-}
-
 export function ExperienceProvider({ children }: { children: ReactNode }) {
-  const [preferences, setPreferences] = useState(initialPreferences)
+  const preferences = usePreferences()
   const [character, setCharacter] = useState('')
   const [notice, setNotice] = useState('')
   const timer = useRef<ReturnType<typeof setTimeout>>()
-
-  useEffect(() => {
-    document.documentElement.dataset.theme = preferences.theme
-    try { localStorage.setItem(preferenceKey, JSON.stringify(preferences)) } catch { /* Storage may be disabled. */ }
-  }, [preferences])
 
   useEffect(() => () => clearTimeout(timer.current), [])
   const notify = useCallback((message: string) => {
@@ -53,9 +33,7 @@ export function ExperienceProvider({ children }: { children: ReactNode }) {
   }, [])
 
   return <ExperienceContext.Provider value={{
-    preferences,
-    toggleTheme: () => setPreferences(current => ({ ...current, theme: current.theme === 'light' ? 'dark' : 'light' })),
-    togglePinyin: () => setPreferences(current => ({ ...current, pinyin: !current.pinyin })),
+    ...preferences,
     showCharacter: setCharacter,
     notify,
   }}>

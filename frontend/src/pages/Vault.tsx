@@ -1,14 +1,30 @@
 import { useEffect, useState } from 'react'
 import { Plus, Search, TreePine } from 'lucide-react'
-import { Hanzi, useExperience, WordDefinition } from '../components/Experience'
-import { Button, Empty, ErrorNotice, LevelBadge, Loading, PageTitle, Pager, Panel, StatusBadge } from '../components/ui'
+import { Hanzi, Pinyin, useExperience, WordDefinition } from '../components/Experience'
+import { EditKnowledgeButton } from '../components/KnowledgeEditor'
+import { Button, Empty, ErrorNotice, LevelBadge, Loading, PageTitle, Pager, Panel, Speaker, StatusBadge } from '../components/ui'
 import { useResource } from '../hooks/useResource'
 import { errorMessage, queueItems, withQuery } from '../lib/api'
-import type { PageResult, Word } from '../types'
+import type { PageResult, Pattern, Sentence, Word } from '../types'
 
 const pageSize = 24
 
 export function Vault() {
+  const [section, setSection] = useState<'words' | 'patterns' | 'sentences'>('words')
+  return <div className="page-stack">
+    <PageTitle title="Từ điển và Cây chữ" description="Tra từ, khám phá cây chữ và chỉnh nội dung trong kho." />
+    <div className="actions" aria-label="Loại mục trong kho">
+      <Button aria-pressed={section === 'words'} onClick={() => setSection('words')}>Từ vựng</Button>
+      <Button aria-pressed={section === 'patterns'} onClick={() => setSection('patterns')}>Mẫu ngữ pháp</Button>
+      <Button aria-pressed={section === 'sentences'} onClick={() => setSection('sentences')}>Câu ví dụ</Button>
+    </div>
+    {section === 'words' && <VaultWords />}
+    {section === 'patterns' && <VaultPatterns />}
+    {section === 'sentences' && <VaultSentences />}
+  </div>
+}
+
+function VaultWords() {
   const { notify, showCharacter } = useExperience()
   const [query, setQuery] = useState('')
   const [term, setTerm] = useState('')
@@ -41,7 +57,6 @@ export function Vault() {
   }
 
   return <div className="page-stack">
-    <PageTitle title="Từ điển và Cây chữ" description="Tra từ trong kho và khám phá những từ có chung một chữ." />
     <Panel className="vault-controls">
       <div className="form-grid">
         <label>Tìm trong kho
@@ -75,10 +90,80 @@ export function Vault() {
           {isOpen && <div className="vault-word-detail">
             <WordDefinition word={word} />
             {word.traditional && word.traditional !== word.simplified && <div className="detail-line"><strong>Phồn thể</strong><Hanzi text={word.traditional} /></div>}
-            {(!status || status === 'ignored') && <Button disabled={queueing !== null} onClick={() => void add(word)}><Plus size={18} />Thêm vào hàng đợi ôn</Button>}
+            <div className="actions">
+              {!status && <Button disabled={queueing !== null} onClick={() => void add(word)}><Plus size={18} />Thêm vào hàng đợi ôn</Button>}
+              <EditKnowledgeButton kind="word" id={word.id} onSaved={updated => {
+                setQueued(current => current.filter(id => id !== updated.id))
+                resource.setData(current => current && ({ ...current, items: current.items.map(item => item.id === updated.id ? updated : item) }))
+              }} />
+            </div>
           </div>}
         </article>
       })}
+      <Pager offset={offset} limit={pageSize} total={resource.data.total} onChange={setOffset} />
+    </Panel>}
+  </div>
+}
+
+function VaultPatterns() {
+  return <VaultRecords<Pattern> path="/patterns" searchLabel="Tìm mẫu ngữ pháp" empty="Chưa có mẫu ngữ pháp phù hợp."
+    render={(pattern, save) => <>
+      <div className="split">
+        <h3>{pattern.title_vi}</h3>
+        <LevelBadge level={pattern.hsk_level} />
+      </div>
+      <Hanzi text={pattern.pattern_formula} className="vault-record-hanzi" mixed />
+      <p>{pattern.explanation_vi}</p>
+      {pattern.structure_notes_vi && <p className="muted">{pattern.structure_notes_vi}</p>}
+      <EditKnowledgeButton kind="pattern" id={pattern.id} onSaved={save} />
+    </>} />
+}
+
+function VaultSentences() {
+  return <VaultRecords<Sentence> path="/sentences" searchLabel="Tìm câu ví dụ" empty="Chưa có câu ví dụ phù hợp."
+    render={(sentence, save) => <>
+      <div className="split">
+        <Hanzi text={sentence.hanzi} className="vault-record-hanzi" />
+        <Speaker text={sentence.hanzi} />
+      </div>
+      <Pinyin text={sentence.pinyin} />
+      <p>{sentence.meaning_vi}</p>
+      <EditKnowledgeButton kind="sentence" id={sentence.id} onSaved={save} />
+    </>} />
+}
+
+function VaultRecords<T extends { id: number }>({ path, searchLabel, empty, render }: {
+  path: string
+  searchLabel: string
+  empty: string
+  render: (record: T, save: (updated: T) => void) => React.ReactNode
+}) {
+  const [query, setQuery] = useState('')
+  const [term, setTerm] = useState('')
+  const [offset, setOffset] = useState(0)
+  const resource = useResource<PageResult<T>>(withQuery(path, { q: term, offset, limit: pageSize }))
+
+  useEffect(() => {
+    const timeout = setTimeout(() => { setTerm(query.trim()); setOffset(0) }, 180)
+    return () => clearTimeout(timeout)
+  }, [query])
+
+  return <div className="page-stack">
+    <Panel>
+      <label>{searchLabel}<span className="search-input">
+        <Search size={18} /><input maxLength={100} value={query} onChange={event => setQuery(event.target.value)} />
+      </span></label>
+    </Panel>
+    {resource.loading && <Loading />}
+    <ErrorNotice message={resource.error} retry={resource.reload} />
+    {resource.data && <Panel>
+      {resource.data.items.length === 0 && <Empty>{empty}</Empty>}
+      {resource.data.items.map(record => <article className="vault-record" key={record.id}>
+        {render(record, updated => resource.setData(current => current && ({
+          ...current,
+          items: current.items.map(item => item.id === updated.id ? updated : item),
+        })))}
+      </article>)}
       <Pager offset={offset} limit={pageSize} total={resource.data.total} onChange={setOffset} />
     </Panel>}
   </div>

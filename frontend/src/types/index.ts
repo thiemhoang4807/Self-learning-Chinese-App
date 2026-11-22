@@ -37,6 +37,15 @@ export interface Sentence {
   is_ai_generated?: boolean
 }
 
+export interface Pattern {
+  id: number
+  pattern_formula: string
+  title_vi: string
+  explanation_vi: string
+  hsk_level: number | null
+  structure_notes_vi: string
+}
+
 export interface Card {
   id: number
   item_id: number
@@ -168,3 +177,28 @@ export interface StoryAttempt {
 export interface ReaderToken { text: string; word: Word | null }
 export interface PageResult<T> { items: T[]; total: number }
 export interface Settings { gemini_configured: boolean; gemini_model: string }
+
+export interface Preferences {
+  theme: 'light' | 'dark'
+  pinyin: boolean
+}
+
+export interface Health extends Settings {
+  status: 'ok' | 'degraded'
+  database: 'ok' | 'unavailable'
+  hsk_word_count: number | null
+  tts_cache_count: number | null
+}
+
+export interface BackupRestore {
+  words_created: number
+  words_updated: number
+  sources_created: number
+  sources_updated: number
+  cards_created: number
+  cards_updated: number
+  reviews_added: number
+  stories_added: number
+  preferences: Preferences
+  message: string
+}
