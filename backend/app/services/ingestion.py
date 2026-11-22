@@ -57,8 +57,8 @@ Batch = TypeVar("Batch")
 MAX_TEXT = 84_000
 MAX_TEXT_LINES = 25_000
 TEXT_BATCH = 14_000
-MAX_DOCUMENT_SECONDS = 185
-IMAGE_SIDE = 2000
+MAX_DOCUMENT_SECONDS = 180
+IMAGE_SIDE = 1600
 IMAGES_PER_BATCH = 4
 MAX_BATCH_IMAGE_BYTES = 12 * 1024 * 1024
 MAX_EXPANDED_OFFICE_BYTES = 150 * 1024 * 1024
@@ -203,7 +203,7 @@ def _office_pdf(data: bytes, suffix: str) -> bytes:
         result = subprocess.run(
             [
                 soffice,
-                f"-env:UserInstallation={(directory / 'profile').as_uri()}",
+                f"-env:UserInstallation={(directory / 'lo_profile').as_uri()}",
                 "--headless",
                 "--norestore",
                 "--convert-to",
@@ -502,14 +502,14 @@ def save_material(db: Session, material: StagedMaterial) -> SourceSummary:
     )
 
 
-def source_summaries(db: Session) -> list[SourceSummary]:
+def source_summaries(db: Session, *, source_id: int | None = None) -> list[SourceSummary]:
     def counts(model):
         return select(func.count()).select_from(model).where(model.source_id == Source.id).scalar_subquery()
 
-    rows = db.execute(
-        select(Source, counts(SourceWord), counts(SourcePattern), counts(SourceSentence))
-        .order_by(Source.created_at.desc(), Source.id.desc())
-    )
+    statement = select(Source, counts(SourceWord), counts(SourcePattern), counts(SourceSentence))
+    if source_id is not None:
+        statement = statement.where(Source.id == source_id)
+    rows = db.execute(statement.order_by(Source.created_at.desc(), Source.id.desc()))
     return [
         SourceSummary(
             id=source.id, title=source.title, source_type=source.source_type, summary_note=source.summary_note,

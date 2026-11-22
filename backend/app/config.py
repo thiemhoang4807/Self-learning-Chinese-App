@@ -14,8 +14,9 @@ class Settings(BaseSettings):
     gemini_api_key: SecretStr = SecretStr("")
     gemini_model: str = "gemini-2.5-flash"
     audio_dir: Path = Path("data/audio")
+    seed_full_hsk: bool = True
     max_upload_bytes: int = Field(25 * 1024 * 1024, ge=1024, le=50 * 1024 * 1024)
-    max_visual_pages: int = Field(24, ge=1, le=50)
+    max_visual_pages: int = Field(48, ge=1, le=50)
 
 
 settings = Settings()

@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+from uuid import uuid4
 
 from sqlalchemy import (
     JSON, Boolean, CheckConstraint, DateTime, ForeignKey, Index, Integer, String, Text,
@@ -13,6 +14,10 @@ def utc_now() -> datetime:
     return datetime.now(timezone.utc)
 
 
+def new_backup_uid() -> str:
+    return str(uuid4())
+
+
 class Source(Base):
     __tablename__ = "sources"
     __table_args__ = (
@@ -20,6 +25,7 @@ class Source(Base):
     )
 
     id: Mapped[int] = mapped_column(primary_key=True)
+    backup_uid: Mapped[str | None] = mapped_column(String(36), default=new_backup_uid, unique=True, index=True)
     title: Mapped[str] = mapped_column(String(250))
     source_type: Mapped[str] = mapped_column(String(12))
     summary_note: Mapped[str] = mapped_column(Text, default="", server_default="")
@@ -170,6 +176,7 @@ class ReviewLog(Base):
     )
 
     id: Mapped[int] = mapped_column(primary_key=True)
+    backup_uid: Mapped[str | None] = mapped_column(String(36), default=new_backup_uid, unique=True, index=True)
     card_id: Mapped[int] = mapped_column(ForeignKey("user_cards.id", ondelete="CASCADE"), index=True)
     rating: Mapped[int]
     drill_mode: Mapped[str] = mapped_column(String(24))
@@ -183,8 +190,21 @@ class StoryAttempt(Base):
     __table_args__ = (CheckConstraint("score between 0 and 100", name="story_score_valid"),)
 
     id: Mapped[int] = mapped_column(primary_key=True)
+    backup_uid: Mapped[str | None] = mapped_column(String(36), default=new_backup_uid, unique=True, index=True)
     target_words: Mapped[list[str]] = mapped_column(JSON)
     text: Mapped[str] = mapped_column(Text)
     score: Mapped[int]
     feedback: Mapped[dict] = mapped_column(JSON)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), index=True)
+
+
+class UserPreference(Base):
+    __tablename__ = "user_preferences"
+    __table_args__ = (
+        CheckConstraint("id = 1", name="preference_singleton"),
+        CheckConstraint("theme in ('light','dark')", name="preference_theme_valid"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, default=1)
+    theme: Mapped[str] = mapped_column(String(5), default="light", server_default="light")
+    pinyin: Mapped[bool] = mapped_column(Boolean, default=False, server_default=false())

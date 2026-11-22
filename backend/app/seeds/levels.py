@@ -45,6 +45,10 @@ def target_levels(text: str) -> tuple[int, ...]:
     return _target_levels().get(text, ())
 
 
+def catalog_entries() -> tuple[tuple[str, int], ...]:
+    return tuple((entry, levels[0]) for entry, levels in _target_levels().items())
+
+
 def compounds_containing(char: str) -> dict[str, int]:
     return {
         entry: levels[0] for entry, levels in _target_levels().items()

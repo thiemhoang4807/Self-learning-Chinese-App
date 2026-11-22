@@ -7,7 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import and_, func, select, tuple_
 from sqlalchemy.orm import Session, aliased
 
-from app.db import get_db
+from app.db import get_db, lock_catalog
 from app.models import ConfusablePair, GrammarPattern, ReviewLog, Sentence, SentenceWord, StoryAttempt, UserCard, Word
 from app.schemas.ai import (
     ConfusableRequest,
@@ -135,6 +135,7 @@ def examples(payload: ExamplesRequest, db: Database) -> ExamplesResult:
             status_code=422,
             detail="Chưa tạo đủ câu mới chỉ dùng vốn từ đang học. Hãy ôn thêm vài từ hoặc thử lại.",
         )
+    lock_catalog(db)
     sentences = [
         ingestion.upsert_sentence(db, example, grammar_id, generated=True, related_words=tokens)
         for example, tokens in chosen.values()
@@ -181,14 +182,19 @@ def create_confusable(payload: ConfusableRequest, db: Database) -> ConfusableRes
     if first is None or second is None:
         raise HTTPException(status_code=404, detail="Chưa tìm thấy một trong hai từ đã chọn.")
     words = {first.id: first, second.id: second}
-    existing = db.scalars(select(ConfusablePair).where(
+    matched_pair = select(ConfusablePair).where(
         tuple_(ConfusablePair.word_a_id, ConfusablePair.word_b_id).in_([(first.id, second.id), (second.id, first.id)])
-    ).order_by(ConfusablePair.id)).first()
+    ).order_by(ConfusablePair.id)
+    existing = db.scalars(matched_pair).first()
     if existing:
         return _pair_result(existing, words[existing.word_a_id].simplified, words[existing.word_b_id].simplified)
 
     first, second = sorted((first, second), key=lambda word: word.id)
     result = ai.generate_confusable(first.simplified, first.meaning_vi, second.simplified, second.meaning_vi)
+    lock_catalog(db)
+    existing = db.scalars(matched_pair).first()
+    if existing:
+        return _pair_result(existing, words[existing.word_a_id].simplified, words[existing.word_b_id].simplified)
     ingestion.insert_missing(
         db,
         ConfusablePair,
@@ -256,6 +262,7 @@ def grade_story(payload: StoryRequest, db: Database) -> StoryResult:
     if not any(is_hanzi(char) for char in payload.text):
         raise HTTPException(status_code=422, detail="Hãy viết một đoạn bằng chữ Hán trước khi chấm.")
     grade = ai.grade_story(payload.target_words, payload.text)
+    lock_catalog(db)
     attempt = StoryAttempt(
         target_words=payload.target_words,
         text=payload.text,

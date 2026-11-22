@@ -1,7 +1,7 @@
 from typing import Annotated, Literal
 
-from fastapi import APIRouter, Depends, HTTPException, Query
-from fastapi.responses import FileResponse
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response
+from fastapi.responses import FileResponse, JSONResponse
 from sqlalchemy import or_, select
 from sqlalchemy.orm import Session
 
@@ -15,7 +15,7 @@ from app.seeds.levels import compounds_containing
 from app.seeds.seed_data import import_words
 from app.services import ai, ingestion
 from app.services.analytics import dashboard
-from app.services.audio import audio_file
+from app.services.audio import SpeechUnavailable, audio_file
 from app.services.library import HANZI, filter_words, pinyin, segment_text, with_word_status, word_page, word_view
 
 router = APIRouter()
@@ -113,9 +113,22 @@ def preferences():
 
 @router.get("/audio/tts", response_class=FileResponse)
 async def tts(
+    request: Request,
     text: Annotated[str, Query(min_length=1, max_length=600)],
     rate: Annotated[float, Query(ge=0.5, le=2.0)] = 1.0,
     voice: Literal["zh-CN-XiaoxiaoNeural", "zh-CN-YunxiNeural"] = "zh-CN-XiaoxiaoNeural",
 ):
-    file = await audio_file(text, voice, rate)
-    return FileResponse(file, media_type="audio/mpeg", headers={"Cache-Control": "private, max-age=31536000, immutable"})
+    try:
+        file = await audio_file(text, voice, rate)
+        stats = file.stat()
+    except (SpeechUnavailable, OSError):
+        return JSONResponse({"detail": "Không thể tạo âm thanh lúc này", "fallback": "web_speech"},
+                            status_code=503, headers={"Cache-Control": "no-store"})
+
+    response = FileResponse(file, stat_result=stats, media_type="audio/mpeg",
+                            headers={"Cache-Control": "private, max-age=31536000, immutable"})
+    matches = {etag.strip().removeprefix("W/") for etag in request.headers.get("if-none-match", "").split(",")}
+    if "*" in matches or response.headers["etag"] in matches:
+        return Response(status_code=304, headers={"ETag": response.headers["etag"],
+                                                  "Cache-Control": response.headers["cache-control"]})
+    return response

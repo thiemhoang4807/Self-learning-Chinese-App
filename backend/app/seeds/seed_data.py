@@ -10,6 +10,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.models import Character, ConfusablePair, GrammarPattern, Sentence, SentenceWord, Word, WordCharacter
+from app.seeds.levels import catalog_entries
 
 
 def _rows(name: str) -> Iterator[list[str]]:
@@ -40,7 +41,9 @@ def _pinyin(text: str) -> str:
     return " ".join(lazy_pinyin(text, style=Style.TONE))
 
 
-def import_words(session: Session, records: Iterable[Mapping[str, Any]]) -> dict[str, Word]:
+def import_words(
+    session: Session, records: Iterable[Mapping[str, Any]], *, enrich_existing: bool = True,
+) -> dict[str, Word]:
     """Populate the catalog, preserving word IDs and all study state."""
     entries = {record["simplified"]: record for record in records}
     if not entries:
@@ -84,7 +87,7 @@ def import_words(session: Session, records: Iterable[Mapping[str, Any]]) -> dict
             word = Word(**values)
             session.add(word)
             words[name] = word
-        else:
+        elif enrich_existing:
             for field, value in record.items():
                 if value and not getattr(word, field):
                     setattr(word, field, value)
@@ -151,13 +154,19 @@ def _seed_confusables(session: Session, words: dict[str, Word]) -> None:
         ))
 
 
-def seed_database(session: Session) -> None:
+def seed_database(session: Session, *, full_hsk: bool = False) -> None:
     words = import_words(session, (
         {
             "simplified": simplified, "pinyin": pinyin, "han_viet": reading, "meaning_vi": meaning,
             "pos": part_of_speech, "hsk_level": int(level) or None, "mnemonic_vi": mnemonic,
         }
         for level, simplified, pinyin, reading, part_of_speech, meaning, mnemonic in _rows("vocabulary")
-    ))
+    ), enrich_existing=False)
     _seed_patterns(session, words)
     _seed_confusables(session, words)
+    if full_hsk:
+        existing = set(session.scalars(select(Word.simplified)))
+        import_words(session, (
+            {"simplified": name, "hsk_level": level}
+            for name, level in catalog_entries() if name not in existing
+        ))

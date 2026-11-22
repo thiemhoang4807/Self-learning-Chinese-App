@@ -26,3 +26,6 @@ Desktop.ini
 *.swp
 *.tmp
 .local/
+backups/
+*.dump
+chinese-study-backup-*.json

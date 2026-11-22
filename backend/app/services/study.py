@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 
 from fsrs import Card, Rating, Scheduler, State
-from sqlalchemy import case, select
+from sqlalchemy import select
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.dialects.sqlite import insert as sqlite_insert
 from sqlalchemy.orm import Session
@@ -16,6 +16,19 @@ def as_utc(value: datetime) -> datetime:
     return value.replace(tzinfo=timezone.utc) if value.tzinfo is None else value.astimezone(timezone.utc)
 
 
+def _scheduled_status(state: State | int, stability: float | None) -> str:
+    if state != State.Review:
+        return "learning"
+    return "mastered" if (stability or 0) >= 14 else "review"
+
+
+def restored_card_status(card: UserCard) -> str:
+    state = card.fsrs_state_json
+    if state:
+        return _scheduled_status(state["state"], state.get("stability"))
+    return "review" if card.reps else "new"
+
+
 def enqueue_many(db: Session, item_type: str, item_ids: list[int], *, reactivate: bool = False) -> int:
     if not item_ids:
         return 0
@@ -23,16 +36,16 @@ def enqueue_many(db: Session, item_type: str, item_ids: list[int], *, reactivate
     statement = insert(UserCard).values([
         {"item_type": item_type, "item_id": item_id} for item_id in sorted(set(item_ids))
     ])
-    key = [UserCard.item_type, UserCard.item_id]
-    if reactivate:
-        statement = statement.on_conflict_do_update(
-            index_elements=key,
-            set_={"status": case((UserCard.reps > 0, "review"), else_="new")},
-            where=UserCard.status == "ignored",
-        )
-    else:
-        statement = statement.on_conflict_do_nothing(index_elements=key)
-    return len(db.scalars(statement.returning(UserCard.id)).all())
+    statement = statement.on_conflict_do_nothing(index_elements=[UserCard.item_type, UserCard.item_id])
+    inserted = len(db.scalars(statement.returning(UserCard.id)).all())
+    if not reactivate:
+        return inserted
+    archived = db.scalars(select(UserCard).where(
+        UserCard.item_type == item_type, UserCard.item_id.in_(item_ids), UserCard.status == "ignored",
+    ).order_by(UserCard.item_id).with_for_update()).all()
+    for card in archived:
+        card.status = restored_card_status(card)
+    return inserted + len(archived)
 
 
 def enqueue(db: Session, item_type: str, item_id: int) -> UserCard:
@@ -54,10 +67,7 @@ def apply_rating(
             card.lapses += 1
     card.reps += 1
     card.is_leech = card.lapses >= 4 or (card.wrong_count >= 4 and card.wrong_count / card.reps >= 0.4)
-    if updated.state != State.Review:
-        card.status = "learning"
-    else:
-        card.status = "mastered" if (updated.stability or 0) >= 14 else "review"
+    card.status = _scheduled_status(updated.state, updated.stability)
     card.fsrs_state_json = updated.to_dict()
     card.due = updated.due
     db.add(ReviewLog(

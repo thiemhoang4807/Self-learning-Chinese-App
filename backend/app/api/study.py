@@ -5,7 +5,7 @@ from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from app.db import get_db
+from app.db import get_db, lock_catalog
 from app.models import ReviewLog, Source, UserCard
 from app.schemas.study import QueueRequest, QueueResult, RatingRequest, RatingResult, SessionMode, StudySession
 from app.services.drills import ITEM_MODELS, study_session
@@ -21,6 +21,7 @@ def session(
     mode: SessionMode = "mixed", source_id: Annotated[int | None, Query(gt=0)] = None,
     hsk_level: Annotated[int | None, Query(ge=1, le=5)] = None, leeches: bool = False,
 ):
+    lock_catalog(db)
     if source_id is not None and db.get(Source, source_id) is None:
         raise HTTPException(404, "Không tìm thấy tài liệu này.")
     result = study_session(db, size, mode, source_id, hsk_level, leeches)
@@ -31,6 +32,7 @@ def session(
 
 @router.post("/queue", response_model=QueueResult)
 def queue(payload: QueueRequest, db: Database):
+    lock_catalog(db)
     model = ITEM_MODELS[payload.item_type]
     ids = set(payload.item_ids)
     found = db.scalars(select(model.id).where(model.id.in_(ids))).all()
@@ -43,6 +45,7 @@ def queue(payload: QueueRequest, db: Database):
 
 @router.post("/cards/{card_id}/review", response_model=RatingResult)
 def review(card_id: int, payload: RatingRequest, db: Database):
+    lock_catalog(db)
     card = db.scalar(select(UserCard).where(UserCard.id == card_id).with_for_update())
     if card is None:
         raise HTTPException(404, "Không tìm thấy thẻ ôn.")
@@ -52,6 +55,8 @@ def review(card_id: int, payload: RatingRequest, db: Database):
             if (previous.card_id, previous.rating, previous.drill_mode) != (card.id, payload.rating, payload.drill_mode):
                 raise HTTPException(409, "Mã đánh giá đã được dùng cho lượt ôn khác.")
             return card
+    if card.status == "ignored":
+        raise HTTPException(409, "Thẻ này đã được ẩn khỏi lịch ôn.")
     apply_rating(db, card, payload)
     try:
         db.commit()

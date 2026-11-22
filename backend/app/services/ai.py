@@ -1,6 +1,7 @@
 import json
 import logging
 from collections.abc import Sequence
+from contextlib import contextmanager
 from typing import TypeVar
 
 import httpx
@@ -24,6 +25,8 @@ TUTOR_INSTRUCTIONS = (
 )
 
 SCHEMA_HINTS = {"default", "minLength", "maxLength", "minItems", "maxItems"}
+TRANSIENT_STATUSES = [500, 502, 503, 504]
+GEMINI_TIMEOUT_MS = 28_000
 
 EXTRACTION_TASK = (
     "Trích lọc tài liệu học kèm theo thành từ vựng, mẫu ngữ pháp và câu ví dụ có thật trong tài liệu. "
@@ -43,6 +46,53 @@ def gemini_key() -> str:
     return key
 
 
+def _invalid_key(error: errors.APIError) -> bool:
+    if error.code in (401, 403):
+        return True
+    payload = error.details if isinstance(error.details, dict) else {}
+    data = payload.get("error", payload)
+    if error.code != 400 or not isinstance(data, dict):
+        return False
+    details = data.get("details") or []
+    return isinstance(details, list) and any(
+        isinstance(item, dict) and item.get("reason") == "API_KEY_INVALID" for item in details
+    )
+
+
+@contextmanager
+def _client(*, readiness: bool = False):
+    key = gemini_key()
+    options = types.HttpOptions(
+        timeout=8_000 if readiness else GEMINI_TIMEOUT_MS,
+        retry_options=types.HttpRetryOptions(attempts=1 if readiness else 2, initial_delay=0.5,
+                                            max_delay=1.0, http_status_codes=TRANSIENT_STATUSES),
+    )
+    try:
+        with genai.Client(api_key=key, http_options=options) as client:
+            yield client
+    except errors.APIError as exc:
+        logger.warning("Gemini API status %s", exc.code)
+        if _invalid_key(exc):
+            raise HTTPException(502, "Gemini từ chối truy cập. Hãy kiểm tra khóa API và quyền dùng mô hình trong .env.") from exc
+        if exc.code == 429:
+            raise HTTPException(503, "Gemini đang quá tải hoặc đã hết hạn mức. Hãy thử lại sau.") from exc
+        if exc.code == 404:
+            raise HTTPException(502, "Chưa dùng được mô hình Gemini đã chọn. Hãy kiểm tra GEMINI_MODEL trong .env.") from exc
+        raise HTTPException(502, "Gemini chưa xử lý được yêu cầu. Hãy thử lại sau.") from exc
+    except (httpx.TimeoutException, TimeoutError) as exc:
+        logger.warning("Gemini request timed out")
+        raise HTTPException(504, "Gemini phản hồi quá lâu. Hãy thử lại hoặc chia tài liệu thành phần nhỏ hơn.") from exc
+    except httpx.RequestError as exc:
+        logger.warning("Gemini network error %s", type(exc).__name__)
+        raise HTTPException(503, "Chưa kết nối được với Gemini. Hãy kiểm tra mạng và thử lại.") from exc
+
+
+def check_readiness() -> str:
+    with _client(readiness=True) as client:
+        client.models.get(model=settings.gemini_model)
+    return settings.gemini_model
+
+
 def _provider_schema(value):
     # Local validation keeps length bounds without making Gemini compile a larger nested schema.
     if isinstance(value, dict):
@@ -57,7 +107,6 @@ def generate_structured(
     task: str,
     data: str | dict | Sequence[types.Part],
 ) -> ResponseModel:
-    key = gemini_key()
     if isinstance(data, str):
         parts = [types.Part.from_text(text=data)]
     elif isinstance(data, dict):
@@ -66,7 +115,7 @@ def generate_structured(
         parts = list(data)
 
     try:
-        with genai.Client(api_key=key, http_options=types.HttpOptions(timeout=45_000)) as client:
+        with _client() as client:
             response = client.models.generate_content(
                 model=settings.gemini_model,
                 contents=[types.Part.from_text(text=task), *parts],
@@ -79,21 +128,6 @@ def generate_structured(
         if not response.text:
             raise ValueError("Empty Gemini response")
         return schema.model_validate_json(response.text, strict=True)
-    except errors.APIError as exc:
-        logger.warning("Gemini API status %s for %s", exc.code, schema.__name__)
-        if exc.code == 429:
-            raise HTTPException(status_code=503, detail="Gemini đang quá tải hoặc đã hết hạn mức. Hãy thử lại sau.") from exc
-        if exc.code == 404:
-            raise HTTPException(
-                status_code=502,
-                detail="Khóa API chưa dùng được mô hình Gemini đã chọn. Hãy kiểm tra GEMINI_MODEL trong tệp .env.",
-            ) from exc
-        if exc.code in (401, 403):
-            raise HTTPException(status_code=502, detail="Gemini từ chối truy cập. Hãy kiểm tra khóa API và quyền dùng mô hình.") from exc
-        raise HTTPException(status_code=502, detail="Gemini chưa xử lý được yêu cầu. Hãy thử lại sau.") from exc
-    except httpx.RequestError as exc:
-        logger.warning("Gemini network error %s", type(exc).__name__)
-        raise HTTPException(status_code=503, detail="Chưa kết nối được với Gemini. Hãy kiểm tra mạng và thử lại.") from exc
     except (ValidationError, ValueError) as exc:
         logger.warning("Gemini returned invalid %s", schema.__name__)
         raise HTTPException(status_code=502, detail="Phản hồi Gemini chưa đúng định dạng. Hãy thử lại.") from exc

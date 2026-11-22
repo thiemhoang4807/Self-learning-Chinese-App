@@ -3,10 +3,10 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
-from sqlalchemy import text
 from starlette.exceptions import HTTPException
 
-from app.api import ai, ingestion, library, study
+from app.api import ai, backup, health, ingestion, library, manage, study
+from app.config import settings
 from app.db import SessionLocal, lock_catalog
 from app.seeds.seed_data import seed_database
 
@@ -15,12 +15,12 @@ from app.seeds.seed_data import seed_database
 async def lifespan(_app: FastAPI):
     with SessionLocal.begin() as session:
         lock_catalog(session)
-        seed_database(session)
+        seed_database(session, full_hsk=settings.seed_full_hsk)
     yield
 
 
 app = FastAPI(title="Mandarin Study", lifespan=lifespan)
-for module in (ai, ingestion, library, study):
+for module in (ai, backup, health, ingestion, library, manage, study):
     app.include_router(module.router, prefix="/api")
 
 
@@ -38,10 +38,3 @@ async def http_error(_request: Request, error: HTTPException) -> JSONResponse:
     }
     detail = messages.get(error.detail, error.detail) if isinstance(error.detail, str) else error.detail
     return JSONResponse({"detail": detail}, status_code=error.status_code, headers=error.headers)
-
-
-@app.get("/api/health")
-def health() -> dict[str, str]:
-    with SessionLocal() as session:
-        session.execute(text("SELECT 1"))
-    return {"status": "ok"}
